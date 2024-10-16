@@ -1,0 +1,94 @@
+.thin-navbar {
+  padding: 0.5rem 1rem; /* Adjust the padding for the navbar */
+  background-color: #000000; /* Set a background color for the navbar */
+  color: rgb(0, 0, 0); /* Default text color for the navbar */
+}
+
+.thin-navbar .navbar-brand img {
+  
+  height: 50px; /* Adjust logo size as needed */
+
+}
+
+.navbar .nav-link {
+  padding: 0.25rem 0.5rem; /* Adjust padding for nav links */
+  color: rgb(0, 0, 0); /* Set text color for nav links */
+  transition: color 0.3s ease; /* Smooth transition for color changes */
+}
+
+.navbar .nav-link:hover {
+  color: #000000; /* Change color on hover for better visibility */
+}
+
+.navbar .dropdown-menu {
+  padding: 0; /* Remove padding from dropdown menu */
+  background-color: #ffffff; /* Set background color for dropdown menu */
+  border: none; /* Remove border for dropdown */
+}
+
+
+.navbar .dropdown-item {
+  color: rgb(9, 9, 9); /* Set text color for dropdown items */
+}
+
+.navbar .dropdown-item:hover {
+  background-color: #cacaca; /* Background color on hover for dropdown items */
+}
+
+/* General Navbar Styles *//* Styling for the avatar container */
+
+.avatar-container {
+  position: relative;
+  display: inline-flex; /* Use inline-flex for better alignment */
+  align-items: center; /* Center align items vertically */
+  cursor: pointer;
+}
+
+/* Person Icon styling */
+.avatar-container i {
+  color: #333; /* Color of the person icon */
+}
+
+/* Styling for the notification dot */
+.notification-dot {
+  position: absolute;
+  top: -2px; /* Adjust position as needed */
+  right: -2px; /* Adjust position as needed */
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  border: 2px solid rgb(100, 253, 133); /* Border to match the background */
+}
+
+/* Adjust dropdown button */
+.account-btn {
+  background-color: transparent;
+  border: none;
+  color: #333;
+  display: flex;
+  align-items: center; /* Ensure items are centered vertically */
+}
+
+/* Dropdown styling adjustments */
+.navbar .dropdown-menu {
+  min-width: 180px;
+}
+
+.navbar .dropdown-item {
+  padding: 10px 15px;
+  color: #333;
+  text-align: left;
+}
+.navbar {
+  padding: 1rem;
+}
+
+.navbar-brand {
+  font-weight: bold;
+}
+
+/* Additional spacing adjustments for the navbar */
+.navbar .ms-auto {
+  margin-left: auto; /* Align items to the right */
+}

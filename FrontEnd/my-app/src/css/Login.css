@@ -1,0 +1,31 @@
+/* Background for the entire login page */
+.login-container {
+  background-image: url('../bgImgs/DigitalAgri.jpeg'); /* Path to the background image */
+  background-size: cover;
+  background-position: center;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Background for the login form itself */
+.login-form {
+  background-color: transparent; /* Fully transparent background */
+  padding: 2rem;
+  border-radius: 0.5rem;
+  box-shadow: black; /* Remove shadow if you want the form to fully blend in */
+  color: #fff; /* Set form text to white for better visibility on darker backgrounds */
+}
+
+/* Form text styling */
+h1, .form-label {
+  color: #fff; /* White color for better visibility */
+}
+
+a {
+  color: #00ccff; /* Light blue for links */
+}
+
+a:hover {
+  text-decoration: underline;
+}

@@ -1,0 +1,37 @@
+/* sidebar.css */
+.nav-link {
+    display: block;             /* Make the link take full width */
+    padding: 10px 15px;        /* Add some padding */
+    margin: 5px 0;             /* Space between links */
+    border: 1px solid transparent; /* Transparent border for hover effect */
+    border-radius: 4px;        /* Rounded corners */
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  /* Change border color and add shadow on hover */
+  .nav-link:hover {
+    border-color: rgba(0, 0, 0, 0.2); /* Add a border color on hover */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+    background-color: rgba(0, 0, 0, 0.05); /* Light background on hover */
+  }
+  
+
+
+  /* sidebar.css */
+.nav-link {
+  display: block;                  /* Make the link take full width */
+  padding: 10px 15px;             /* Add some padding */
+  margin: 5px 0;                  /* Space between links */
+  color: black;                   /* Change link color to black */
+  text-decoration: none;           /* Remove underline */
+  border: 1px solid transparent;   /* Transparent border for hover effect */
+  border-radius: 4px;             /* Rounded corners */
+  transition: border-color 0.3s, box-shadow 0.3s; /* Smooth transition */
+}
+
+/* Change border color and add shadow on hover */
+.nav-link:hover {
+  border-color: rgba(0, 0, 0, 0.2); /* Add a border color on hover */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow on hover */
+  background-color: rgba(0, 0, 0, 0.05); /* Light background on hover */
+}

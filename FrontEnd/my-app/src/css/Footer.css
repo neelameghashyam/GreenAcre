@@ -1,0 +1,24 @@
+.footer {
+  padding: 2rem 0;
+}
+
+.footer h5 {
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.footer a {
+  text-decoration: none;
+}
+
+.footer .text-dark:hover {
+  color: #007bff; /* Hover color for links */
+}
+
+.footer .bg-dark {
+  background-color: #343a40 !important;
+}
+
+.footer .text-white {
+  color: #fff !important;
+}

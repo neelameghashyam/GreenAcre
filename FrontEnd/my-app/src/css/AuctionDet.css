@@ -1,0 +1,5 @@
+.alert.alert-light.border.bid-card {
+    margin-bottom: 2px !important; /* Ensure this margin is applied */
+    padding: 8px !important; /* Ensure this padding is applied */
+    border-radius: 5px; /* Optional: round the corners */
+}

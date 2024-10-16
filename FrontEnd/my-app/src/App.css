@@ -1,0 +1,74 @@
+/* Global Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  color: #333;
+  height: 100%;
+  width: 100%;
+}
+
+.app {
+  min-height: 100vh; /* Full viewport height */
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1; /* Take up the remaining space */
+  padding: 20px;
+  background-color: #fff;
+  margin: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 15px; /* Space between links */
+  padding: 10px 0;
+}
+
+.nav-links li {
+  display: inline-block;
+}
+
+.nav-links a, .nav-links button {
+  color: #007bff;
+  text-decoration: none;
+  font-size: 16px;
+  padding: 8px 12px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.nav-links a:hover, .nav-links button:hover {
+  background-color: #e2e6ea; /* Light background on hover */
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .nav-links {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .main-content {
+    margin: 10px;
+    padding: 15px;
+  }
+}

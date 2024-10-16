@@ -1,0 +1,38 @@
+/* AdminDashboard.css */
+body {
+    background-color: #f8f9fa; /* Light background color */
+  }
+  
+  .sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    height: 100%; /* Full height */
+    padding: 48px 0 0; /* Add padding */
+    background-color: #f8f9fa; /* Sidebar background color */
+  }
+  
+  .sidebar-heading {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333; /* Darker color for headings */
+  }
+  
+  .nav-link {
+    color: #333; /* Darker color for links */
+  }
+  
+  .nav-link:hover {
+    background-color: #e9ecef; /* Highlight on hover */
+  }
+  
+  .chart-container {
+    margin-top: 20px; /* Spacing above chart */
+  }
+  
+  h2 {
+    margin-top: 20px; /* Spacing above main heading */
+  }
+  

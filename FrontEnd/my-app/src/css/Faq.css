@@ -1,0 +1,22 @@
+/* Faq.css */
+
+.faq-title {
+    color: black; /* Change title color to black */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.faq-contact {
+    font-size: 1rem;
+    margin-top: 20px;
+    text-align: center;
+}
+
+
+.faq-contact {
+    font-size: 1rem;
+    margin-top: 20px;
+    text-align: center;
+    padding-bottom: 40px;
+    padding-top: 40px; /* Add padding below the contact message */
+}

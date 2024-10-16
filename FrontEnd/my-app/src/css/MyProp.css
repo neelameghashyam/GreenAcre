@@ -1,0 +1,20 @@
+/* MyProp.css */
+.property-card {
+    height: 100%; /* Ensures card takes full height of its container */
+}
+
+.property-img-wrapper {
+    width: 150px; /* Adjust the width as necessary */
+    height: 100%; /* Maintain full height */
+    overflow: hidden; /* Hide overflow */
+}
+
+.property-details-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Space out the content */
+}
+
+.card {
+    margin-bottom: 1rem; /* Add spacing between cards */
+}
