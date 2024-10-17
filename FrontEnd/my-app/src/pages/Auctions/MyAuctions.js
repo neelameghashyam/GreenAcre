@@ -106,7 +106,7 @@ export default function MyAuctions() {
         <div className="container mt-4">
             <h2 className="mb-4 text-center" style={{ color: 'black' }}>My Auctions</h2>
             {auctions.length === 0 ? (
-                <p>No Auctions Posted</p> // Show this message if no auctions are found
+                <div className="alert alert-info">No Auctions Posted</div> // Show this message if no auctions are found
             ) : (
                 <div className="row">
                     {auctions.map(auction => (
@@ -181,7 +181,7 @@ export default function MyAuctions() {
                                             <p className="card-text"><strong>Category:</strong> {auction.category}</p>
                                             <p className="card-text"><strong>Start Date:</strong> {formatDate(auction.startDate)}</p>
                                             <p className="card-text"><strong>End Date:</strong> {formatDate(auction.endDate)}</p>
-                                            <p className="card-text"><strong>Starting Bid:</strong> ${auction.startBid}</p>
+                                            <p className="card-text"><strong>Starting Bid:</strong> ₹{auction.startBid}</p>
                                             <div className="card-footer">
                                                 <button className="btn btn-warning" onClick={() => handleEdit(auction)}>Edit</button>
                                                 <button className="btn btn-danger ms-2" onClick={() => handleDelete(auction._id)}>Delete</button>

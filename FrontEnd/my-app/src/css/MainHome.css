@@ -1,35 +1,39 @@
 .card {
-    height: 100%; /* Ensures all cards have the same height */
+  height: 100%; /* Ensures all cards have the same height */
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.img-fluid {
+  max-height: 200px; /* Adjust the image height as needed */
+  object-fit: cover;
+}
+
+@media (max-width: 768px) {
+  .card {
+    margin-bottom: 20px; /* Spacing between cards for small screens */
   }
-  
-  .card-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  .img-fluid {
-    max-height: 200px; /* Adjust the image height as needed */
-    object-fit: cover;
-  }
-  
-  @media (max-width: 768px) {
-    .card {
-      margin-bottom: 20px; /* Spacing between cards for small screens */
-    }
-  }
+}
+
+.custom-img {
+  width: 100%; /* Make the image take full width of the container */
+  max-height: 450px; /* Control the height to avoid overflow */
+  object-fit: cover; /* Ensures the image doesn't get distorted */
+  float: right; /* Positions the image on the right */
+  margin-left: 20px; /* Add some space to the left of the image */
+}
+
+@media (max-width: 768px) {
   .custom-img {
-    width: 100%; /* Make the image take full width of the container */
-    max-height: 450px; /* Control the height to avoid overflow */
-    object-fit: cover; /* Ensures the image doesn't get distorted */
-    float: right; /* Positions the image on the right */
-    margin-left: 20px; /* Add some space to the left of the image */
+    width: 100%; /* On small screens, let the image take full width */
+    margin-left: 0; /* Remove the margin on small screens */
   }
-  
-  @media (max-width: 768px) {
-    .custom-img {
-      width: 100%; /* On small screens, let the image take full width */
-      margin-left: 0; /* Remove the margin on small screens */
-    }
-  }
-  
+}
+
+.hero-section {
+  background-attachment: fixed; /* Makes the background image fixed */
+}

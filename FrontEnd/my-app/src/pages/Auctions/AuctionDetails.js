@@ -198,7 +198,7 @@ export default function AuctionDetails() {
       <div className="card-header">
         <h4>Your Previous Bids</h4>
       </div>
-      <div className="card-body">
+      <div className="alert" role="alert">
         {previousBids.map(bid => (
           <div key={bid._id} className="alert alert-light border bid-card">
           <p><strong>Bid Amount:</strong> ₹{bid.bid}</p>

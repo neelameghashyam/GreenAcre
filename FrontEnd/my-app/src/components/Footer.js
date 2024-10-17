@@ -52,7 +52,7 @@ function Footer() {
             <h5 className="text-uppercase">Contact Us</h5>
             <ul className="list-unstyled">
               <li className="text-dark">
-                <strong>Toll Free:</strong> 1800 41 99099
+                <strong>Toll Free:</strong> 1899 99 99999
               </li>
               <li className="text-dark">
                 9:30 AM to 6:30 PM (Mon-Sun)

@@ -40,7 +40,7 @@ paymentCntrl.create = async (req, res) => {
         price_data: {
           currency: 'inr',
           product_data: {
-            name: "Auctions",
+            name: "Auctions Subscription LifeTime",
           },
           unit_amount: body.amount * 100, // Convert amount to smallest currency unit (paise for INR)
         },
