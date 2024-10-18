@@ -7,6 +7,7 @@ export default function AuctionList() {
   const [auctions, setAuctions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(6);
+  const [timeLeft, setTimeLeft] = useState({}); // Store timers for each auction
 
   useEffect(() => {
     const fetchAuctions = async () => {
@@ -30,6 +31,44 @@ export default function AuctionList() {
     const auctionEndDate = new Date(endDate);
     return auctionEndDate > currentDate; 
   };
+
+  const calculateTimeLeft = (endDate) => {
+    const difference = new Date(endDate) - new Date();
+    if (difference > 0) {
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((difference / 1000 / 60) % 60);
+      const seconds = Math.floor((difference / 1000) % 60);
+
+      return {
+        days,
+        hours,
+        minutes,
+        seconds,
+      };
+    } else {
+      return null; 
+    }
+  };
+
+  useEffect(() => {
+    const updateTimers = () => {
+      const newTimeLeft = {};
+      auctions.forEach((auction) => {
+        const timeRemaining = calculateTimeLeft(auction.endDate);
+        if (timeRemaining) {
+          newTimeLeft[auction._id] = timeRemaining;
+        }
+      });
+      setTimeLeft(newTimeLeft);
+    };
+
+    updateTimers();
+
+    const intervalId = setInterval(updateTimers, 1000); // Update every second
+    console.log(1)
+    return () => clearInterval(intervalId);
+  }, [auctions]);
 
   // Pagination Logic
   const filteredAuctions = auctions.filter(auction => auction.approved && isAuctionActive(auction.endDate));
@@ -63,6 +102,15 @@ export default function AuctionList() {
                 <p className="card-text"><strong>Start Date:</strong> {formatDate(auction.startDate)}</p>
                 <p className="card-text"><strong>End Date:</strong> {formatDate(auction.endDate)}</p>
                 <p className="card-text"><strong>Starting Bid:</strong> ₹{auction.startBid}</p>
+
+                {timeLeft[auction._id] ? (
+                  <p className="alert alert-info">
+                    <strong>Time Left:</strong> {timeLeft[auction._id].days}d {timeLeft[auction._id].hours}h {timeLeft[auction._id].minutes}m {timeLeft[auction._id].seconds}s
+                  </p>
+                ) : (
+                  <p className="card-text text-danger">Auction Ended</p>
+                )}
+
                 <Link to={`/auction/${auction._id}`} className="btn btn-primary">Show Auction</Link>
               </div>
             </div>
