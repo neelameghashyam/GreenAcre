@@ -7,6 +7,8 @@ import "../../css/AllAuctions.css"; // Import your custom CSS
 export default function AllAuctions() {
   const [auctions, setAuctions] = useState([]);
   const [showNotApproved, setShowNotApproved] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(3); // Adjust the number of posts per page
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -73,6 +75,16 @@ export default function AllAuctions() {
     ],
   };
 
+  // Pagination Logic
+  const filteredAuctions = auctions.filter(auction => (showNotApproved ? !auction.approved : auction.approved));
+  const indexOfLastAuction = currentPage * postsPerPage;
+  const indexOfFirstAuction = indexOfLastAuction - postsPerPage;
+  const currentAuctions = filteredAuctions.slice(indexOfFirstAuction, indexOfLastAuction);
+  
+  const totalPages = Math.ceil(filteredAuctions.length / postsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   return (
     <div className="container mt-4">
       <div className="mb-4 text-center">
@@ -102,36 +114,49 @@ export default function AllAuctions() {
       </div>
 
       <div className="row">
-        {auctions
-          .filter(auction => (showNotApproved ? !auction.approved : auction.approved))
-          .map((auction) => (
-            <div key={auction._id} className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm">
-                <img
-                  src={auction.file ? `http://localhost:2002${auction.file}` : 'placeholder-image-url'} // Replace with an actual placeholder URL if needed
-                  alt={auction.title}
-                  className="card-img-top"
-                  style={{ maxHeight: "200px", objectFit: "cover" }}
-                />
-                <div className="card-body">
-                  <h5 className="card-title">{auction.title}</h5>
-                  <p className="card-text">{auction.description}</p>
-                  <p className="card-text"><strong>Category:</strong> {auction.category}</p>
-                  <p className="card-text"><strong>Start Date:</strong> {formatDate(auction.startDate)}</p>
-                  <p className="card-text"><strong>End Date:</strong> {formatDate(auction.endDate)}</p>
-                  <p className="card-text"><strong>Starting Bid:</strong> {auction.startBid}</p>
-                  <Link to={`/auction/${auction._id}`} className="btn btn-primary">Show Auction</Link><br/>
+        {currentAuctions.map((auction) => (
+          <div key={auction._id} className="col-md-4 mb-4">
+            <div className="card h-100 shadow-sm">
+              <img
+                src={auction.file ? `http://localhost:2002${auction.file}` : 'placeholder-image-url'} // Replace with an actual placeholder URL if needed
+                alt={auction.title}
+                className="card-img-top"
+                style={{ maxHeight: "200px", objectFit: "cover" }}
+              />
+              <div className="card-body">
+                <h5 className="card-title">{auction.title}</h5>
+                <p className="card-text">{auction.description}</p>
+                <p className="card-text"><strong>Category:</strong> {auction.category}</p>
+                <p className="card-text"><strong>Start Date:</strong> {formatDate(auction.startDate)}</p>
+                <p className="card-text"><strong>End Date:</strong> {formatDate(auction.endDate)}</p>
+                <p className="card-text"><strong>Starting Bid:</strong> {auction.startBid}</p>
+                <Link to={`/auction/${auction._id}`} className="btn btn-primary">Show Auction</Link><br/>
 
-                  {!auction.approved && (
-                    <button className="btn btn-success mt-2" onClick={() => approveAuction(auction._id)}>Approve Auction</button>
-                  )}
-                 <br/>
-                  <button className="btn btn-danger mt-2" onClick={() => deleteAuction(auction._id)}>Delete Auction</button>
-                </div>
+                {!auction.approved && (
+                  <button className="btn btn-success mt-2" onClick={() => approveAuction(auction._id)}>Approve Auction</button>
+                )}
+                <br/>
+                <button className="btn btn-danger mt-2" onClick={() => deleteAuction(auction._id)}>Delete Auction</button>
               </div>
             </div>
-          ))}
+          </div>
+        ))}
       </div>
+
+      {/* Pagination Controls */}
+      {totalPages > 1 && (
+        <nav>
+          <ul className="pagination justify-content-center mt-4">
+            {[...Array(totalPages).keys()].map((page) => (
+              <li key={page + 1} className={`page-item ${currentPage === page + 1 ? 'active' : ''}`}>
+                <button onClick={() => paginate(page + 1)} className="page-link">
+                  {page + 1}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      )}
     </div>
   );
 }

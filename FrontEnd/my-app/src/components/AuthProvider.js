@@ -47,9 +47,10 @@ function AuthProvider(props) {
             await axios.post('/api/user/register', formData);
             toast('Successfully Registered', { autoClose: 1000 });
             navigate('/login');
-        } catch (err) {
-            console.log(err.response.data); // Log the response to see detailed error
-        }
+        } catch ({ response }) {
+            const errorMessage = response?.data?.message || 'error occoured while registering';
+            toast.error(errorMessage, { autoClose: 1000 });
+          }
     };
     
 
@@ -63,11 +64,11 @@ function AuthProvider(props) {
                 headers: { 'Authorization': localStorage.getItem('token') },
             });
             dispatch({ type: 'LOGIN_USER', payload: userResponse.data });
-            // console.log(userResponse.data)
             navigate('/');
-        } catch (err) {
-            console.log(err);
-        }
+        } catch ({ response }) {
+            const errorMessage = response?.data?.message || 'invalid email or password';
+            toast.error(errorMessage, { autoClose: 1000 });
+          }
     };
 
     const handleLogout = () => {

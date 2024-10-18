@@ -1,13 +1,15 @@
 import { useEffect, useState } from "react";
 import axios from "../../config/axios";
-import { useParams } from "react-router-dom";
+import { useParams,useNavigate } from "react-router-dom";
 
 export default function AuctionResCalculation() {
   const { id } = useParams();
   const [auction, setAuction] = useState({});
   const [finalBid, setFinalBid] = useState(null);
-  const [bidderName, setBidderName] = useState(""); // State to hold the bidder's name
-  const [error, setError] = useState(null); // State to manage errors
+  const [bidderName, setBidderName] = useState(""); 
+  const [error, setError] = useState(null); 
+  const navigate = useNavigate();
+
 
   useEffect(() => {
     const fetchAuction = async () => {
@@ -71,6 +73,9 @@ export default function AuctionResCalculation() {
               headers: { Authorization: localStorage.getItem("token") },
             }
           );
+
+            navigate('/all-auctions')
+
         } else {
           setError("User ID is missing in the highest bid.");
         }

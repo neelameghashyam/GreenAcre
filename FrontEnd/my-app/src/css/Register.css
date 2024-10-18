@@ -1,6 +1,6 @@
 /* Background for the entire registration page */
 .register-container {
-    background-image: url('../bgImgs/rebg.jpeg'); /* Path to the background image */
+    background-image: url('../bgImgs/growthAg.jpeg'); /* Path to the background image */
     background-size: cover;
     background-position: center;
     position: relative;
@@ -11,11 +11,11 @@
   
   /* Background for the registration form itself */
   .register-form {
-    background-color: transparent; /* Semi-transparent white background */
+    background-color: rgba(0, 0, 0, 0.6); 
     padding: 2rem;
     border-radius: 0.5rem;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Slight shadow for form */
-    color: #ffffff; /* Dark text color for better readability */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); 
+    color: #fff; 
   }
   
   /* Form text styling */

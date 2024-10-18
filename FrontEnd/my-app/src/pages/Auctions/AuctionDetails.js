@@ -50,7 +50,7 @@ export default function AuctionDetails() {
   useEffect(() => {
     const fetchBids = async () => {
       try {
-        if (state.user) { // Fetch bids only if the user is logged in
+        if (state.user) { 
           const response = await axios.get(`/api/bidder/get-all-of-auction/${id}`, {
             headers: { 'Authorization': localStorage.getItem('token') },
           });
@@ -157,7 +157,7 @@ export default function AuctionDetails() {
               <p className="card-text"><strong>Current Highest Bid:</strong> ₹{highestBid || 'No bids yet'}</p>
 
               {ownerDetails ? (
-                <div className="mt-3">
+                <div className="alert alert-info">
                   <h6>Owner Details:</h6>
                   <p><strong>Name:</strong> {ownerDetails.name}</p>
                   <p><strong>Email:</strong> {ownerDetails.email}</p>

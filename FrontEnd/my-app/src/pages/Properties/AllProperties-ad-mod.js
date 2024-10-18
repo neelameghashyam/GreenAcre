@@ -10,6 +10,10 @@ export default function AllProperties() {
     const [showNotApproved, setShowNotApproved] = useState(false); // State to toggle not-approved properties view
     const token = localStorage.getItem('token');
 
+    // Pagination States
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 3; // Number of posts per page
+
     useEffect(() => {
         const fetchPosts = async () => {
             try {
@@ -85,12 +89,18 @@ export default function AllProperties() {
     // Filtered list for displaying posts (based on showNotApproved toggle)
     const filteredPosts = showNotApproved ? posts.filter(post => !post.approved) : posts;
 
+    // Pagination Logic
+    const indexOfLastPost = currentPage * itemsPerPage;
+    const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+    const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+    const totalPages = Math.ceil(filteredPosts.length / itemsPerPage);
+
     return (
         <div className="container mt-4">
             <h1 className="text-center mb-4" style={{ color: 'black' }}>All Properties</h1>
 
             {/* Pie Chart to display Approved vs Not Approved */}
-            <div className="mb-4" style={{ width: '200px', margin: '0 auto' ,height:'200px'}}>
+            <div className="mb-4" style={{ width: '200px', margin: '0 auto', height: '200px' }}>
                 <Pie data={pieData} options={pieOptions} />
             </div>
 
@@ -104,7 +114,7 @@ export default function AllProperties() {
             </div>
 
             <div className="row">
-                {filteredPosts.map(post => (
+                {currentPosts.map(post => (
                     <div key={post._id} className="col-md-4 mb-4">
                         <div className="card h-100 shadow-sm">
                             {post.file && (
@@ -139,6 +149,21 @@ export default function AllProperties() {
                     </div>
                 ))}
             </div>
+
+            {/* Pagination Controls */}
+            {totalPages > 1 && (
+                <nav>
+                    <ul className="pagination justify-content-center mt-4">
+                        {[...Array(totalPages)].map((_, index) => (
+                            <li key={index + 1} className={`page-item ${currentPage === index + 1 ? 'active' : ''}`}>
+                                <button onClick={() => setCurrentPage(index + 1)} className="page-link">
+                                    {index + 1}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                </nav>
+            )}
         </div>
     );
 }

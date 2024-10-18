@@ -3,6 +3,7 @@ import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import axios from '../config/axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import '../css/sidebar.css'; // Adjust the path as needed
 
 // Register components for Chart.js
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -57,9 +58,6 @@ export default function ModeratorDashboard() {
     return counts;
   }, [auctionsData]);
 
-  // Check if auctionsByCategory is calculated correctly
-  console.log("Auctions by Category:", auctionsByCategory);
-
   // Pie chart data for properties
   const propertiesPieData = useMemo(() => ({
     labels: ['Farm Land', 'Dairy Farm', 'Poultry Farm', 'Agri Industrial', 'Other'],
@@ -67,11 +65,11 @@ export default function ModeratorDashboard() {
       {
         data: propertiesByCategory,
         backgroundColor: [
-          'rgba(255, 99, 132, 0.6)',
-          'rgba(54, 162, 235, 0.6)',
-          'rgba(255, 206, 86, 0.6)',
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(153, 102, 255, 0.6)',
+          'rgba(0, 128, 0, 0.6)',      // green
+          'rgb(101, 163, 255)',      // blue
+          'rgba(210, 105, 30, 0.6)',   // orange-brown
+          'rgba(128, 128, 0, 0.6)',    // olive
+          'rgba(0, 0, 0, 0.6)',        // black
         ],
         borderColor: 'rgba(255, 255, 255, 1)',
         borderWidth: 1,
@@ -86,10 +84,10 @@ export default function ModeratorDashboard() {
       {
         data: auctionsByCategory,
         backgroundColor: [
-          'rgba(75, 192, 192, 0.6)',
-          'rgba(255, 159, 64, 0.6)',
-          'rgba(153, 102, 255, 0.6)',
-          'rgba(255, 99, 132, 0.6)',
+          'rgba(0, 128, 0, 0.6)',      // green
+          'rgb(101, 163, 255)',      // blue
+          'rgba(210, 105, 30, 0.6)',   // orange-brown
+          'rgba(0, 0, 0, 0.6)',        // black
         ],
         borderColor: 'rgba(255, 255, 255, 1)',
         borderWidth: 1,
@@ -116,31 +114,32 @@ export default function ModeratorDashboard() {
       <div className="row">
         {/* Sidebar */}
         <nav className="col-md-2 d-none d-md-block bg-light sidebar">
-          <div className="sidebar-sticky">
+          <div className="sidebar-sticky" style={{ paddingTop: "40px" }}>
             <h5 className="sidebar-heading">Moderator Dashboard</h5>
             <ul className="nav flex-column">
               <li className="nav-item">
-                <a className="nav-link" href="/all-auctions" target="_blank" rel="noopener noreferrer">
+                <a className="nav-link" href="/all-auctions">
                   All Auctions
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/all-properties" target="_blank" rel="noopener noreferrer">
+                <a className="nav-link" href="/all-properties">
                   All Properties
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/results-calculation-auctions" target="_blank" rel="noopener noreferrer">
+                <a className="nav-link" href="/results-calculation-auctions">
                   Auctions Results Calculations
                 </a>
               </li>
+            
               <li className="nav-item">
-                <a className="nav-link" href="/my-properties" target="_blank" rel="noopener noreferrer">
+                <a className="nav-link" href="/my-properties">
                   My Properties
                 </a>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/my-auctions" target="_blank" rel="noopener noreferrer">
+                <a className="nav-link" href="/my-auctions">
                   My Auctions
                 </a>
               </li>
@@ -149,8 +148,8 @@ export default function ModeratorDashboard() {
         </nav>
 
         {/* Main Content */}
-        <main className="col-md-9 ms-sm-auto col-lg-10 px-4">
-          <h2>Admin Dashboard Overview</h2>
+        <main className="col-md-9 ms-sm-auto col-lg-10 px-4" style={{ paddingTop: "40px" }}>
+          <h3>Overview</h3>
 
           {/* Display count of users, properties, and auctions */}
           <div className="row">
@@ -158,7 +157,7 @@ export default function ModeratorDashboard() {
               <div className="card mb-4 shadow-sm">
                 <div className="card-body">
                   <h5>Total Users</h5>
-                  <p>{usersCount}</p>
+                  <h4><b>{usersCount}</b></h4>
                 </div>
               </div>
             </div>
@@ -167,7 +166,7 @@ export default function ModeratorDashboard() {
               <div className="card mb-4 shadow-sm">
                 <div className="card-body">
                   <h5>Total Properties</h5>
-                  <p>{propertiesCount}</p>
+                  <h4><b>{propertiesCount}</b></h4>
                 </div>
               </div>
             </div>
@@ -176,24 +175,23 @@ export default function ModeratorDashboard() {
               <div className="card mb-4 shadow-sm">
                 <div className="card-body">
                   <h5>Total Auctions</h5>
-                  <p>{auctionsCount}</p>
+                  <h4><b>{auctionsCount}</b></h4>
                 </div>
               </div>
             </div>
           </div>
 
-          <h4>Charts Overview</h4>
           <div className="row">
             <div className="col-md-6">
-              <h4>Properties by Category</h4>
-              <div className="chart-container" style={{ width: '100%', height: '400px' }}>
+              <br /><h4>Properties by Category</h4><br />
+              <div className="chart-container" style={{ width: '80%', height: '300px' }}>
                 <Pie data={propertiesPieData} options={pieOptions} />
               </div>
             </div>
 
             <div className="col-md-6">
-              <h4>Auctions by Category</h4>
-              <div className="chart-container" style={{ width: '100%', height: '400px' }}>
+              <br /><h4>Auctions by Category</h4><br />
+              <div className="chart-container" style={{ width: '70%', height: '300px' }}>
                 {auctionsByCategory.some(count => count > 0) ? (
                   <Pie data={auctionsPieData} options={pieOptions} />
                 ) : (

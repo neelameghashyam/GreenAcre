@@ -1,6 +1,6 @@
 /* Background for the entire login page */
 .login-container {
-  background-image: url('../bgImgs/DigitalAgri.jpeg'); /* Path to the background image */
+  background-image: url('../bgImgs/LoginBg.jpg'); /* Path to the background image */
   background-size: cover;
   background-position: center;
   position: relative;
@@ -10,12 +10,13 @@
 
 /* Background for the login form itself */
 .login-form {
-  background-color: transparent; /* Fully transparent background */
+  background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background (black with 50% opacity) */
   padding: 2rem;
   border-radius: 0.5rem;
-  box-shadow: black; /* Remove shadow if you want the form to fully blend in */
-  color: #fff; /* Set form text to white for better visibility on darker backgrounds */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Optional shadow for better contrast */
+  color: #fff; /* White text */
 }
+
 
 /* Form text styling */
 h1, .form-label {
@@ -29,3 +30,8 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+.custom-link {
+  color: rgb(44, 160, 255);
+}
+
