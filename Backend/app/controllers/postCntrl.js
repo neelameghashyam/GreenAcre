@@ -45,6 +45,7 @@ postCntrl.edit = async (req, res) => {
         post.mapLocation = body.mapLocation || post.mapLocation;
         post.description = body.description || post.description;
         post.city = body.city || post.city;
+        post.pincode = body.pincode || post.pincode;
         post.locality = body.locality || post.locality;
         post.address = body.address || post.address;
         post.area = body.area || post.area;

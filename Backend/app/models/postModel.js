@@ -9,6 +9,7 @@ const postSchema=new Schema({
     description:String,
     state:String,
     city:String,
+    pincode:Number,
     locality:String,
     address:String,
     area:Number,

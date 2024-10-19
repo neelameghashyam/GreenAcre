@@ -1,5 +1,7 @@
 import { validationResult } from "express-validator";
 import Auction from "../models/auctionModel.js";
+import nodemailer from 'nodemailer';
+
 
 const auctionCntrl = {};
 
@@ -81,8 +83,6 @@ auctionCntrl.delete = async (req, res) => {
 };
 
 
-
-
 // Get all auctions
 auctionCntrl.getAll = async (req, res) => {
     try {
@@ -141,12 +141,58 @@ auctionCntrl.finalResults = async (req, res) => {
             return res.status(400).json({ message: "Auction has not ended yet" });
         }
 
-        const { highestBid, bidderName } = req.body;
+        const { highestBid, bidderName,email } = req.body;
 
         if (highestBid > auction.startBid) {
             auction.finalBid = highestBid;
             auction.bidderName = bidderName;
             await auction.save();
+
+            const transporter = nodemailer.createTransport({
+                service: 'Gmail',
+                auth: {
+                    user: process.env.EMAIL_USER,
+                    pass: process.env.EMAIL_APP_PASS
+                }
+            });
+
+            const dateObject = new Date(auction.endDate);
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = dateObject.toLocaleDateString('en-US', options);
+
+            const mailOptions = {
+                from: process.env.EMAIL_USER,
+                to: email,
+                subject: 'Congratulations! You’ve Won the Auction!',
+                html: `
+                    <div>
+                        <img 
+                         src="cid:green_acre_image" 
+                         alt="Green Acre" 
+                         style="max-width: 100%; height: auto; display: block; margin: 0 auto;" 
+                        />
+                        <p>Dear ${bidderName},</p>
+                        <p>We are thrilled to inform you that you have won the auction for [Item/Property Name]! Congratulations!</p>
+                        <p>Auction Details:</p>
+                        <p>Item/Property Name: ${auction.title}</p>
+                        <p>Winning Bid: ₹${highestBid}</p>
+                        <p>Auction Date: ${formattedDate}</p>
+                        <p>To proceed with the payment and finalize the transaction, please visit your account on our platform or contact our customer service team at [Customer Service Email/Phone Number].</p>
+                        <p>We would like to thank you for participating in our auction and hope you enjoy your new [item/property]. If you have any questions or need further assistance, please don’t hesitate to reach out.</p>
+                        <p>Once again, congratulations on your win!</p>
+                        <p>Best regards,<br />Green Acre</p>
+                    </div>
+                `,
+                attachments: [
+                    {
+                        filename: 'Green_Acre.png',
+                        path: 'C:/Portifolio-Project/FrontEnd/my-app/src/bgImgs/Green_Acre.png',
+                        cid: 'green_acre_image' 
+                    }
+                ]
+            };
+            
+            await transporter.sendMail(mailOptions);
             res.status(200).json({ message: "Auction result finalized", auction });
         } else {
             res.status(400).json({ message: "No valid bids above the starting bid" });

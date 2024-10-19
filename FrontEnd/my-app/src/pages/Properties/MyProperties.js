@@ -918,6 +918,7 @@ export default function MyProperties() {
         mapLocation: "",
         description: "",
         city: "",
+        pincode:"",
         locality: "",
         address: "",
         area: "",
@@ -936,6 +937,7 @@ export default function MyProperties() {
             if (!values.mapLocation) errors.mapLocation = "Map location is required";
             if (!values.description) errors.description = "Description is required";
             if (!values.city) errors.city = "City is required";
+            if (!values.pincode) errors.city = "Pincode is required";
             if (!values.state) errors.state = "State is required";
             if (!values.ownerShip) errors.ownerShip = "Ownership is required";
             if (!values.area) errors.area = "Area is required";
@@ -976,6 +978,7 @@ export default function MyProperties() {
             mapLocation: post.mapLocation,
             description: post.description,
             city: post.city,
+            pincode:post.pincode,
             locality: post.locality,
             address: post.address,
             area: post.area,
@@ -1136,6 +1139,17 @@ export default function MyProperties() {
                                     </select>
                                     {formik.errors.city && <div className="text-danger">{formik.errors.city}</div>}
                                 </div>
+                                <div className="mb-3">
+                    <label className="form-label" style={{ color: 'black' }}>Pincode</label>
+                    <input
+                        type="number"
+                        name="pincode"
+                        className="form-control"
+                        value={formik.values.pincode}
+                        onChange={formik.handleChange}
+                    />
+                    {formik.errors.pincode ? <div className="text-danger">{formik.errors.pincode}</div> : null}
+                </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Locality</label>

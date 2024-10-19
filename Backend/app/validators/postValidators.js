@@ -52,6 +52,18 @@ export const postValidationSchema = {
         errorMessage: "City cannot be empty"
       }
     },
+    pincode: {
+      exists: {
+        errorMessage: "Pincode field is required"
+      },
+      notEmpty: {
+        errorMessage: "Pincode cannot be empty"
+      },
+      isLength: {
+        options: { min:6, max:6 },
+        errorMessage: "Pincode must be 6 digits"
+      }
+    },
     locality: {
       exists: {
         errorMessage: "Locality field is required"

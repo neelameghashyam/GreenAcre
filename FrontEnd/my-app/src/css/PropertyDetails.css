@@ -1,0 +1,27 @@
+.container {
+    max-width: 1200px; /* Limit the maximum width */
+    margin: auto; /* Center the container */
+  }
+  
+  .property-details {
+    padding: 20px;
+    background: #f9f9f9; /* Light background for details */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  }
+  
+  .map-container {
+    border: 1px solid #ccc; /* Border around the map */
+    border-radius: 8px; /* Rounded corners for the map */
+    overflow: hidden; /* Ensure corners are rounded */
+  }
+  
+  .directions-container {
+    margin-top: 20px; /* Space above directions */
+  }
+  
+  .btn {
+    padding: 10px 20px; /* Button padding */
+    font-size: 16px; /* Button font size */
+  }
+  

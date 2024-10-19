@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "../../config/axios";
 import { useParams,useNavigate } from "react-router-dom";
 
+
+
 export default function AuctionResCalculation() {
   const { id } = useParams();
   const [auction, setAuction] = useState({});
@@ -22,7 +24,6 @@ export default function AuctionResCalculation() {
           const highestBid = response.data.finalBid;
           setFinalBid(highestBid); // Set the final bid state
 
-          // Fetch the user's name based on the saved finalBid.user
           if (highestBid.user) {
             const userResponse = await axios.get(`/api/user/${highestBid.user}`, {
               headers: { Authorization: localStorage.getItem("token") },
@@ -63,12 +64,13 @@ export default function AuctionResCalculation() {
             headers: { Authorization: localStorage.getItem("token") },
           });
           
-          const userName = userResponse.data.name; // Access the name from the fetched user
+          const userName = userResponse.data.name;
+          const email=userResponse.data.email
           setBidderName(userName); // Set the bidder's name
           
           await axios.put(
             `/api/auction/final-bid/${id}`,
-            { highestBid: highestBid.bid, bidderName: userName },
+            { highestBid: highestBid.bid, bidderName: userName,email:email },
             {
               headers: { Authorization: localStorage.getItem("token") },
             }

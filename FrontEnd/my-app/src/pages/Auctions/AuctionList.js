@@ -1,13 +1,17 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState,useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../../config/axios';
+import AuthContext from "../../context/AuthContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 export default function AuctionList() {
   const [auctions, setAuctions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [postsPerPage] = useState(6);
-  const [timeLeft, setTimeLeft] = useState({}); // Store timers for each auction
+  const [timeLeft, setTimeLeft] = useState({}); 
+  const [showModal, setShowModal] = useState(false);
+  const { state } = useContext(AuthContext); 
+
 
   useEffect(() => {
     const fetchAuctions = async () => {
@@ -20,6 +24,30 @@ export default function AuctionList() {
     };
     fetchAuctions();
   }, []);
+
+
+  useEffect(()=>{
+    const fetchpayment = async () => {
+      try {
+        const response = await axios.get(`/api/payment/get/${state.user}}`, {
+          headers: { 'Authorization': localStorage.getItem('token') },
+        });
+
+        if(response.data.paymentStatus==='success'){
+          setShowModal(false)
+        }else {
+          setShowModal(true)
+        }
+      } catch (err) {
+        console.error('Error fetching payment:', err);
+        if(state.user){
+          setShowModal(true)
+        }
+
+      }
+    };
+    fetchpayment();
+  },[state.user])
 
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
@@ -65,20 +93,37 @@ export default function AuctionList() {
 
     updateTimers();
 
-    const intervalId = setInterval(updateTimers, 1000); // Update every second
-    console.log(1)
+    const intervalId = setInterval(updateTimers, 1000); 
     return () => clearInterval(intervalId);
   }, [auctions]);
 
-  // Pagination Logic
+
   const filteredAuctions = auctions.filter(auction => auction.approved && isAuctionActive(auction.endDate));
   const indexOfLastAuction = currentPage * postsPerPage;
   const indexOfFirstAuction = indexOfLastAuction - postsPerPage;
   const currentAuctions = filteredAuctions.slice(indexOfFirstAuction, indexOfLastAuction);
-
   const totalPages = Math.ceil(filteredAuctions.length / postsPerPage);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleSubscribe=async()=>{
+    try {
+      const body = {
+        amount: "299",
+        user: state.user._id, 
+      };
+
+      const response = await axios.post('/api/payment/create', body, { 
+        headers: { 'Authorization': localStorage.getItem('token') } 
+      });
+
+      localStorage.setItem('stripeId', response.data.id);
+      window.location = response.data.url;
+    
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   return (
     <div className="container my-5">
@@ -117,6 +162,47 @@ export default function AuctionList() {
           </div>
         ))}
       </div>
+
+      
+
+      {/* Subscription */}
+      {showModal && (
+           <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+    <div className="modal-dialog" role="document" style={{ backgroundColor: '#2c6a30' }}>
+      <div className="modal-content" style={{ backgroundColor: '#2c6a30' }}>
+        <div className="modal-body text-center">
+          {/* Replace text with video */}
+          <video width="100%" height="auto" autoPlay  muted>
+            <source src={require('C:/Portifolio-Project/FrontEnd/my-app/src/bgImgs/subscription.mp4')} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+
+          {/* Buttons centered in the modal */}
+          <div className="d-flex justify-content-center mt-4">
+            <button 
+              type="button" 
+              className="btn mx-2" 
+              onClick={() => setShowModal(false)} 
+              style={{ backgroundColor: '#f04641', color: 'white' }}
+            >
+              Close
+            </button>
+            <button 
+              type="button" 
+              className="btn mx-2" 
+              onClick={handleSubscribe} 
+              style={{ backgroundColor: '#1db4e4', color: 'white' }}
+            >
+              Pay Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
+
 
       {/* Pagination */}
       {totalPages > 1 && (

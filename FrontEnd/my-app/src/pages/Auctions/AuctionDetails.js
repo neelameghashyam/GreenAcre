@@ -4,6 +4,8 @@ import axios from "../../config/axios";
 import { toast } from 'react-toastify';
 import AuthContext from "../../context/AuthContext";
 import '../../css/AuctionDet.css'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 export default function AuctionDetails() {
   const { id } = useParams();
@@ -15,6 +17,8 @@ export default function AuctionDetails() {
   const [previousBids, setPreviousBids] = useState([]);
   const [highestBid, setHighestBid] = useState(0);
   const[payment,setPayment]=useState({})
+  const [showModal, setShowModal] = useState(false);
+
   const { state } = useContext(AuthContext); 
 
   // Fetch auction details on component mount
@@ -41,6 +45,7 @@ export default function AuctionDetails() {
         console.log(response.data)
       } catch (err) {
         console.error('Error fetching payment:', err);
+        
       }
     };
     fetchpayment();
@@ -74,17 +79,18 @@ export default function AuctionDetails() {
 
   const handleView = async () => {
     try {
-      if (state.user) {
+      if (state.user && payment.paymentStatus==='success') {
         const response = await axios.get(`/api/user/${auction.user}`, {
           headers: { 'Authorization': localStorage.getItem('token') }
         });
         setOwnerDetails(response.data);
-      } else {
+      } else if(!state.user){
         navigate('/login');
+      }else {
+        setShowModal(true)
       }
     } catch (err) {
       console.error('Error fetching owner details:', err);
-      toast.error('Error fetching owner details');
     }
   };
 
@@ -93,21 +99,10 @@ export default function AuctionDetails() {
       if(payment.paymentStatus==='success'){
          setBidForm(true)
       }else{
-      const body = {
-        amount: "299",
-        user: state.user._id, 
-      };
-
-      const response = await axios.post('/api/payment/create', body, { // Include the body in the post request
-        headers: { 'Authorization': localStorage.getItem('token') } // Pass the token in the headers
-      });
-
-      localStorage.setItem('stripeId', response.data.id);
-      window.location = response.data.url;
+        setShowModal(true)
     }
     } catch (err) {
       console.error(err);
-      // toast.error('Payment creation failed: ' + err.response.data.error);
     }
   };
 
@@ -136,6 +131,25 @@ export default function AuctionDetails() {
 
   if (!auction) return <p>Loading...</p>;
 
+  const handleSubscribe=async()=>{
+    try {
+      const body = {
+        amount: "299",
+        user: state.user._id, 
+      };
+
+      const response = await axios.post('/api/payment/create', body, { 
+        headers: { 'Authorization': localStorage.getItem('token') } 
+      });
+
+      localStorage.setItem('stripeId', response.data.id);
+      window.location = response.data.url;
+    
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   return (
     <div className="container my-5">
       <div className="row">
@@ -156,7 +170,7 @@ export default function AuctionDetails() {
               <p className="card-text"><strong>Starting Bid:</strong> ₹{auction.startBid}</p>
               <p className="card-text"><strong>Current Highest Bid:</strong> ₹{highestBid || 'No bids yet'}</p>
 
-              {ownerDetails ? (
+              {ownerDetails  ? (
                 <div className="alert alert-info">
                   <h6>Owner Details:</h6>
                   <p><strong>Name:</strong> {ownerDetails.name}</p>
@@ -219,6 +233,43 @@ export default function AuctionDetails() {
 </div>
 
       </div>
+
+      {/* Subscription */}
+      {showModal && (
+           <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+    <div className="modal-dialog" role="document" style={{ backgroundColor: '#2c6a30' }}>
+      <div className="modal-content" style={{ backgroundColor: '#2c6a30' }}>
+        <div className="modal-body text-center">
+          {/* Replace text with video */}
+          <video width="100%" height="auto" autoPlay  muted>
+            <source src={require('C:/Portifolio-Project/FrontEnd/my-app/src/bgImgs/subscription.mp4')} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+
+          {/* Buttons centered in the modal */}
+          <div className="d-flex justify-content-center mt-4">
+            <button 
+              type="button" 
+              className="btn mx-2" 
+              onClick={() => setShowModal(false)} 
+              style={{ backgroundColor: '#f04641', color: 'white' }}
+            >
+              Close
+            </button>
+            <button 
+              type="button" 
+              className="btn mx-2" 
+              onClick={handleSubscribe} 
+              style={{ backgroundColor: '#1db4e4', color: 'white' }}
+            >
+              Pay Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }
