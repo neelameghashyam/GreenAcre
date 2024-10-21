@@ -172,7 +172,7 @@ auctionCntrl.finalResults = async (req, res) => {
                          style="max-width: 100%; height: auto; display: block; margin: 0 auto;" 
                         />
                         <p>Dear ${bidderName},</p>
-                        <p>We are thrilled to inform you that you have won the auction for [Item/Property Name]! Congratulations!</p>
+                        <p>We are thrilled to inform you that you have won the auction for Congratulations!</p>
                         <p>Auction Details:</p>
                         <p>Item/Property Name: ${auction.title}</p>
                         <p>Winning Bid: ₹${highestBid}</p>
