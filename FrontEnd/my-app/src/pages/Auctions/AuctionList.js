@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import axios from '../../config/axios';
 import AuthContext from "../../context/AuthContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import subscriptionVideo from '../../videos/subscription.mp4'; // Assuming this is the correct video path
+import subscriptionVideo from '../../bgImgs/subscription.mp4';
 
 export default function AuctionList() {
   const [auctions, setAuctions] = useState([]);

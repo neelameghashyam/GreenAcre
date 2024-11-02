@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 import AuthContext from "../../context/AuthContext";
 import '../../css/AuctionDet.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import subscriptionVideo from '../../bgImgs/subscription.mp4'; // Correctly importing the video file
+import subscriptionVideo from '../../bgImgs/subscription.mp4';
 
 export default function AuctionDetails() {
   const { id } = useParams();
@@ -239,21 +239,39 @@ export default function AuctionDetails() {
 
       {/* Subscription Modal */}
       {showModal && (
-        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
-          <div className="modal-dialog" role="document" style={{ backgroundColor: '#2c6a30' }}>
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Subscription Required</h5>
-                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+                <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+                <div className="modal-dialog" role="document" style={{ backgroundColor: '#2c6a30' }}>
+                  <div className="modal-content" style={{ backgroundColor: '#2c6a30' }}>
+                    <div className="modal-body text-center">
+                      {/* Video in modal */}
+                      <video width="100%" height="auto" autoPlay muted loop>
+                        <source src={subscriptionVideo} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+      
+                      {/* Buttons centered in the modal */}
+                      <div className="d-flex justify-content-center mt-4">
+                        <button 
+                          type="button" 
+                          className="btn mx-2" 
+                          onClick={() => setShowModal(false)} 
+                          style={{ backgroundColor: '#f04641', color: 'white' }}
+                        >
+                          Close
+                        </button>
+                        <button 
+                          type="button" 
+                          className="btn mx-2" 
+                          onClick={handleSubscribe} 
+                          style={{ backgroundColor: '#1db4e4', color: 'white' }}
+                        >
+                          Pay Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="modal-body text-center">
-                <p>Subscribe to access this content.</p>
-                <video src={subscriptionVideo} controls className="img-fluid mb-2" />
-                <button className="btn btn-primary" onClick={handleSubscribe}>Subscribe Now</button>
-              </div>
-            </div>
-          </div>
-        </div>
       )}
     </div>
   );
