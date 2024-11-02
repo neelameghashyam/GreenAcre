@@ -242,7 +242,7 @@ export default function AuctionDetails() {
         <div className="modal-body text-center">
           {/* Replace text with video */}
           <video width="100%" height="auto" autoPlay  muted>
-            <source src={require('C:/Portifolio-Project/FrontEnd/my-app/src/bgImgs/subscription.mp4')} type="video/mp4" />
+            <source src={require('C:/Portifolio-Project/FrontEnd/my-app/src/bgImgs/subscription.png')} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
 
