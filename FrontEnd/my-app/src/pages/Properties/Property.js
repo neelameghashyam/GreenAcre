@@ -1,103 +1,182 @@
-import { useFormik } from "formik";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import AuthContext from '../../context/AuthContext';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
-import StatesAndDistricts from "../../StatesAndDistricts.json"
+import axios from "../../config/axios";
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import StatesAndDistricts from "../../StatesAndDistricts.json";
+import { MapContainer, TileLayer, Marker, Popup,useMap } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import L from 'leaflet'; // Import Leaflet
+import iconLoc from '../../bgImgs/iconLoc.png'
+import debounce from 'lodash.debounce'
 
 export default function Property() {
     const { handlePropertyCreation } = useContext(AuthContext);
     const [selectedState, setSelectedState] = useState("");
     const [selectedDistrict, setSelectedDistrict] = useState("");
-    const [selectedFile, setSelectedFile] = useState(null); // For storing selected file
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [mapLocation, setMapLocation] = useState([15.961329081596647, 75.9375]); 
+    const [pincode, setPincode] = useState('');
 
-    const formik = useFormik({
-        initialValues: {
-            type: "",
-            propertyType: "",
-            mapLocation: "",
-            description: "",
-            state: "",
-            city: "",
-            pincode:"",
-            locality: "",
-            address: "",
-            area: "",
-            unitMeasurement: "",
-            ownerShip: "",
-            price: "",
-        },
+    const [position, setPosition] = useState(null)
+    const [draggable, setDraggable] = useState(true)
 
-        validate: (values) => {
-            let errors = {};
-
-            if (!values.type) errors.type = "Type is required";
-            if (!values.propertyType) errors.propertyType = "Property type is required";
-            if (!values.state) errors.state = "State is required";
-            if (!values.city) errors.city = "City is required";
-            if (!values.pincode) errors.city = "Pincode is required";
-            if (!values.ownerShip) errors.ownerShip = "Ownership is required";
-            if (!values.mapLocation) errors.mapLocation = "Map location is required";
-            if (!values.description) errors.description = "Description is required";
-            if (!values.area) errors.area = "Area is required";
-            if (!values.unitMeasurement) errors.unitMeasurement = "Unit measurement is required";
-            if (!values.price) errors.price = "Price is required";
-
-            return errors;
-        },
-
-        onSubmit: (values) => {
-            const formData = new FormData();
-            for (const key in values) {
-                formData.append(key, values[key]);
-            }
-
-            if (selectedFile) {
-                formData.append("file", selectedFile)
-            }
-
-            handlePropertyCreation(formData)
-        },
+    const customIcon = new L.Icon({
+        iconUrl: iconLoc, 
+        iconSize: [32, 32], 
+        iconAnchor: [16, 32], 
+        popupAnchor: [0, -32] 
     });
 
+    const fetchCoordinates = debounce(async () => {
+        try {
+            const response = await axios.get(`https://us1.locationiq.com/v1/search.php`, {
+                params: {
+                    key: process.env.LOCATIO_IQ_KEY,
+                    q: `${pincode}, ${selectedDistrict}`,
+                    format: 'json'
+                }
+            });
+    
+            if (Array.isArray(response.data) && response.data.length > 0) {
+                const { lat, lon } = response.data[0];
+                const loc = [parseFloat(lat), parseFloat(lon)];
+                setPosition(loc);
+
+            }
+        } catch (err) {
+            console.error("Error fetching coordinates:", err);
+        }
+    }, 1000); 
+    
+    
+    useEffect(() => {
+        if (pincode && selectedDistrict) {
+            fetchCoordinates();
+        }
+    }, [pincode]);
+    
+    const toggleDraggable = () => {
+        setDraggable(!draggable);
+    };
+
+    const updatePosition = (event) => {
+        const marker = event.target;
+        setPosition(marker.getLatLng());
+        setMapLocation([marker.getLatLng().lat, marker.getLatLng().lng]); // Update mapLocation for the form 
+    };
+    const ZoomToMarker = ({ position }) => {
+        const map = useMap();
+
+        useEffect(() => {
+            if (position) {
+                map.setView(position, 10); 
+            }
+        }, [map, position]);
+
+        return null;
+    };
+
+    const handleMarkerClick = () => {
+        setPosition(mapLocation);
+    };
+
+    const [formValues, setFormValues] = useState({
+        type: "",
+        propertyType: "",
+        description: "",
+        state: "",
+        city: "",
+        address: "",
+        area: "",
+        unitMeasurement: "",
+        ownerShip: "",
+        price: ""
+    });
+
+    const [errors, setErrors] = useState({});
+
+    const handleChange = (event) => {
+        const { name, value } = event.target;
+        setFormValues({ ...formValues, [name]: value });
+    };
+
     const handleFileChange = (event) => {
-        setSelectedFile(event.target.files[0]); // Capture the selected file
+        setSelectedFile(event.target.files[0]);
     };
 
     const handleStateChange = (event) => {
-      const selected = event.target.value;
-      setSelectedState(selected);
-      setSelectedDistrict("");
-      formik.setFieldValue("state", selected);
-      formik.setFieldValue("city", "");
-  };
+        const selected = event.target.value;
+        setSelectedState(selected);
+        setSelectedDistrict("");
+        setFormValues({ ...formValues, state: selected, city: "" });
+    };
 
-  const handleDistrictChange = (event) => {
-      const selected = event.target.value;
-      setSelectedDistrict(selected);
-      formik.setFieldValue("city", selected);
-  };
+    const handleDistrictChange = (event) => {
+        const selected = event.target.value;
+        setSelectedDistrict(selected);
+        setFormValues({ ...formValues, city: selected });
+    };
 
-  const selectedStateObject = StatesAndDistricts.find(stateObj => stateObj.state === selectedState);
+    const validate = () => {
+        let tempErrors = {};
+        if (!formValues.type) tempErrors.type = "Type is required";
+        if (!formValues.propertyType) tempErrors.propertyType = "Property type is required";
+        if (!formValues.state) tempErrors.state = "State is required";
+        if (!formValues.city) tempErrors.city = "City is required";
+        if (!formValues.ownerShip) tempErrors.ownerShip = "Ownership is required";
+        if (!formValues.description) tempErrors.description = "Description is required";
+        if (!formValues.area) tempErrors.area = "Area is required";
+        if (!formValues.unitMeasurement) tempErrors.unitMeasurement = "Unit measurement is required";
+        if (!formValues.price) tempErrors.price = "Price is required";
+        setErrors(tempErrors);
+        return Object.keys(tempErrors).length === 0;
+    };
 
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        if (validate()) {
+            const formData = new FormData();
+            for (const key in formValues) {
+                formData.append(key, formValues[key]);
+            }
+
+            if (selectedFile) {
+                formData.append("file", selectedFile);
+            }
+
+            if (mapLocation) {
+                formData.append("mapLocation", mapLocation);
+            }
+
+            if (pincode) {
+                formData.append("pincode", pincode);
+            }
+
+            handlePropertyCreation(formData);
+        }
+    };
+
+    const selectedStateObject = StatesAndDistricts.find(stateObj => stateObj.state === selectedState);
 
     return (
         <div className="container mt-4">
             <h2 className="mb-4">Property Listing</h2>
-            <form onSubmit={formik.handleSubmit} encType="multipart/form-data">
+            <form onSubmit={handleSubmit} encType="multipart/form-data">
+                {/* Form Fields */}
                 <div className="mb-3">
                     <label className="form-label" style={{ color: 'black' }}>Type</label>
                     <select
                         name="type"
                         className="form-select"
-                        value={formik.values.type}
-                        onChange={formik.handleChange}
+                        value={formValues.type}
+                        onChange={handleChange}
                     >
                         <option value="">Select Type</option>
                         <option value="sale">For Sale</option>
                         <option value="rent">For Rent</option>
                         <option value="lease">For Lease</option>
                     </select>
-                    {formik.errors.type ? <div className="text-danger">{formik.errors.type}</div> : null}
+                    {errors.type && <div className="text-danger">{errors.type}</div>}
                 </div>
 
                 <div className="mb-3">
@@ -105,8 +184,8 @@ export default function Property() {
                     <select
                         name="propertyType"
                         className="form-select"
-                        value={formik.values.propertyType}
-                        onChange={formik.handleChange}
+                        value={formValues.propertyType}
+                        onChange={handleChange}
                     >
                         <option value="">Select Property Type</option>
                         <option value="Farm Land">Farm Land</option>
@@ -115,11 +194,11 @@ export default function Property() {
                         <option value="Agri Industrial">Agri Industrial</option>
                         <option value="Other">Other</option>
                     </select>
-                    {formik.errors.propertyType ? <div className="text-danger">{formik.errors.propertyType}</div> : null}
+                    {errors.propertyType && <div className="text-danger">{errors.propertyType}</div>}
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label" style={{color:"black"}}>State</label>
+                    <label className="form-label" style={{ color: 'black' }}>State</label>
                     <select
                         name="state"
                         className="form-select"
@@ -131,7 +210,7 @@ export default function Property() {
                             <option key={stateObj.state} value={stateObj.state}>{stateObj.state}</option>
                         ))}
                     </select>
-                    {formik.errors.state && <div className="text-danger">{formik.errors.state}</div>}
+                    {errors.state && <div className="text-danger">{errors.state}</div>}
                 </div>
 
                 <div className="mb-3">
@@ -148,18 +227,18 @@ export default function Property() {
                             <option key={district} value={district}>{district}</option>
                         ))}
                     </select>
-                    {formik.errors.city ? <div className="text-danger">{formik.errors.city}</div> : null}
+                    {errors.city && <div className="text-danger">{errors.city}</div>}
                 </div>
+
                 <div className="mb-3">
                     <label className="form-label" style={{ color: 'black' }}>Pincode</label>
                     <input
                         type="number"
                         name="pincode"
                         className="form-control"
-                        value={formik.values.pincode}
-                        onChange={formik.handleChange}
+                        value={pincode}
+                        onChange={(e) => setPincode(e.target.value)}
                     />
-                    {formik.errors.pincode ? <div className="text-danger">{formik.errors.pincode}</div> : null}
                 </div>
 
                 <div className="mb-3">
@@ -167,26 +246,14 @@ export default function Property() {
                     <select
                         name="ownerShip"
                         className="form-select"
-                        value={formik.values.ownerShip}
-                        onChange={formik.handleChange}
+                        value={formValues.ownerShip}
+                        onChange={handleChange}
                     >
                         <option value="">Select Ownership</option>
                         <option value="owned">Owned</option>
                         <option value="leased">Leased</option>
                     </select>
-                    {formik.errors.ownerShip ? <div className="text-danger">{formik.errors.ownerShip}</div> : null}
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label" style={{ color: 'black' }}>Map Location</label>
-                    <input
-                        type="text"
-                        name="mapLocation"
-                        className="form-control"
-                        value={formik.values.mapLocation}
-                        onChange={formik.handleChange}
-                    />
-                    {formik.errors.mapLocation ? <div className="text-danger">{formik.errors.mapLocation}</div> : null}
+                    {errors.ownerShip && <div className="text-danger">{errors.ownerShip}</div>}
                 </div>
 
                 <div className="mb-3">
@@ -194,33 +261,22 @@ export default function Property() {
                     <textarea
                         name="description"
                         className="form-control"
-                        value={formik.values.description}
-                        onChange={formik.handleChange}
+                        value={formValues.description}
+                        onChange={handleChange}
                     />
-                    {formik.errors.description ? <div className="text-danger">{formik.errors.description}</div> : null}
+                    {errors.description && <div className="text-danger">{errors.description}</div>}
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label" style={{ color: 'black' }}>Locality</label>
-                    <input
-                        type="text"
-                        name="locality"
-                        className="form-control"
-                        value={formik.values.locality}
-                        onChange={formik.handleChange}
-                    />
-                </div>
-
-                <div className="mb-3">
-                    <label className="form-label" style={{ color: 'black' }}>Address</label>
-                    <input
-                        type="text"
-                        name="address"
-                        className="form-control"
-                        value={formik.values.address}
-                        onChange={formik.handleChange}
-                    />
-                </div>
+                                    <label className="form-label" style={{ color: 'black' }}> Address</label>
+                                    <input
+                                        type="text"
+                                        name="address"
+                                        className="form-control"
+                                        value={formValues.address}
+                                        onChange={handleChange}
+                                    />
+                                </div>
 
                 <div className="mb-3">
                     <label className="form-label" style={{ color: 'black' }}>Area</label>
@@ -228,10 +284,10 @@ export default function Property() {
                         type="number"
                         name="area"
                         className="form-control"
-                        value={formik.values.area}
-                        onChange={formik.handleChange}
+                        value={formValues.area}
+                        onChange={handleChange}
                     />
-                    {formik.errors.area ? <div className="text-danger">{formik.errors.area}</div> : null}
+                    {errors.area && <div className="text-danger">{errors.area}</div>}
                 </div>
 
                 <div className="mb-3">
@@ -239,15 +295,16 @@ export default function Property() {
                     <select
                         name="unitMeasurement"
                         className="form-select"
-                        value={formik.values.unitMeasurement}
-                        onChange={formik.handleChange}
+                        value={formValues.unitMeasurement}
+                        onChange={handleChange}
                     >
                         <option value="">Select Unit Measurement</option>
-                        <option value="sqft">Square Feet</option>
+                        <option value="sq ft">Square Feet</option>
                         <option value="acres">Acres</option>
                         <option value="hectares">Hectares</option>
+                        <option value="sq meters">Square Meters</option>
                     </select>
-                    {formik.errors.unitMeasurement ? <div className="text-danger">{formik.errors.unitMeasurement}</div> : null}
+                    {errors.unitMeasurement && <div className="text-danger">{errors.unitMeasurement}</div>}
                 </div>
 
                 <div className="mb-3">
@@ -256,21 +313,47 @@ export default function Property() {
                         type="number"
                         name="price"
                         className="form-control"
-                        value={formik.values.price}
-                        onChange={formik.handleChange}
+                        value={formValues.price}
+                        onChange={handleChange}
                     />
-                    {formik.errors.price ? <div className="text-danger">{formik.errors.price}</div> : null}
+                    {errors.price && <div className="text-danger">{errors.price}</div>}
                 </div>
 
                 <div className="mb-3">
-                    <label className="form-label" style={{ color: 'black' }}>Upload Property Image</label>
-                    <input
-                        type="file"
-                        name="file"
-                        className="form-control"
-                        onChange={handleFileChange} // Capture file input
-                    />
+                    <label className="form-label" style={{ color: 'black' }}>Upload Image</label>
+                    <input type="file" className="form-control" onChange={handleFileChange} />
                 </div>
+
+                {/* Map Section */}
+                <div className="mb-3">
+                    <label className="form-label" style={{ color: 'black' }}> Set property Location</label>
+                    <div style={{ height: '300px' }}>
+                        <MapContainer center={mapLocation} zoom={4} style={{ height: "100%" }}>
+                            <TileLayer
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            />
+                            {position && (
+                                <Marker
+                                    position={position}
+                                    icon={customIcon} 
+                                    draggable={draggable}
+                                    eventHandlers={{
+                                        dragend: updatePosition,
+                                        click: handleMarkerClick, // Handle marker click to zoom the location
+                                    }}
+                                >
+                                    <Popup minWidth={90}>
+                                        <span onClick={toggleDraggable}>
+                                            {draggable ? 'Drag the marker to set the location' : 'Marker fixed'}
+                                        </span>
+                                    </Popup>
+                                </Marker>
+                            )}
+                            {position && <ZoomToMarker position={position} />} 
+                        </MapContainer>
+                    </div>
+                </div><br/>
 
                 <button type="submit" className="btn btn-primary">Submit</button>
             </form>

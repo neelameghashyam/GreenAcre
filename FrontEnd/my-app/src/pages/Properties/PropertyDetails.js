@@ -20,8 +20,6 @@ export default function PropertyDetails() {
   const [ownerDetails, setOwnerDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
   const mapRef = useRef(null);
 
   useEffect(() => {
@@ -38,40 +36,14 @@ export default function PropertyDetails() {
     fetchProperty();
   }, [id]);
 
-  useEffect(() => {
-    if (property && property.mapLocation) {
-      const fetchCoordinates = async () => {
-        try {
-          const response = await axios.get(`https://us1.locationiq.com/v1/search.php`, {
-            params: {
-              key: "pk.8e34b2bcaaefefbada0e712c444425e3",
-              q: `${property.pincode}, ${property.city}`,
-              format: 'json'
-            },
-          });
-
-          if (Array.isArray(response.data) && response.data.length > 0) {
-            const { lat, lon } = response.data[0]; 
-            setLatitude(lat);
-            setLongitude(lon);
-          } else {
-            setLatitude(response.data.lat);
-            setLongitude(response.data.lon);
-          }
-
-        } catch (err) {
-          setError('Failed to fetch coordinates');
-          console.error("Error fetching coordinates:", err);
-        }
-      };
-
-      fetchCoordinates();
-    }
-  }, [property]);
-
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
   if (!property) return <p>No property found</p>;
+
+  // Split mapLocation into latitude and longitude
+  const mapLocationArray = property.mapLocation?.[0].split(',').map(Number);
+  const latitude = mapLocationArray?.[0] || 0;
+  const longitude = mapLocationArray?.[1] || 0;
 
   const handleView = async () => {
     try {
@@ -95,7 +67,7 @@ export default function PropertyDetails() {
   const handleMarkerClick = () => {
     if (mapRef.current) {
       const map = mapRef.current;
-      map.setView([latitude, longitude], 10)
+      map.setView([latitude, longitude], 10);
     }
   };
 
@@ -120,7 +92,6 @@ export default function PropertyDetails() {
             <p><strong>Description:</strong> {property.description}</p>
             <p><strong>City:</strong> {property.city}</p>
             <p><strong>Pincode:</strong> {property.pincode}</p>
-            <p><strong>Locality:</strong> {property.locality}</p>
             <p><strong>Address:</strong> {property.address}</p>
             <p><strong>Area:</strong> {property.area} {property.unitMeasurement}</p>
             <p><strong>Ownership:</strong> {property.ownerShip}</p>
@@ -144,8 +115,8 @@ export default function PropertyDetails() {
 
       <div className="map-container mt-4" style={{ height: '400px' }}>
         <MapContainer
-          center={latitude && longitude ? [latitude, longitude] : [0, 0]}
-          zoom={latitude && longitude ? 13 : 2}
+          center={[latitude, longitude]}
+          zoom={latitude !== 0 && longitude !== 0 ? 13 : 2}
           className="map"
           style={{ height: '100%', width: '100%' }}
           ref={mapRef} 
@@ -154,7 +125,7 @@ export default function PropertyDetails() {
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
-          {latitude && longitude && (
+          {latitude !== 0 && longitude !== 0 && (
             <Marker position={[latitude, longitude]} icon={icon} eventHandlers={{
               click: handleMarkerClick 
             }}>
@@ -164,18 +135,6 @@ export default function PropertyDetails() {
             </Marker>
           )}
         </MapContainer>
-      </div>
-
-      <div className="directions-container text-center mt-4">
-        <p>
-          <br />
-          <button
-            className="btn btn-primary mt-2"
-            onClick={() => window.open(property.mapLocation, "_blank")}
-          >
-            Get Directions
-          </button>
-        </p>
       </div>
     </div>
   );

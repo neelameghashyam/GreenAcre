@@ -5,23 +5,18 @@ import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import StatesAndDistricts from "../../StatesAndDistricts.json";
 
-
-
-
 export default function MyProperties() {
     const [posts, setPosts] = useState([]);
     const [editMode, setEditMode] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
-    const navigate=useNavigate()
+    const navigate = useNavigate();
     
     const initialValues = {
         type: "",
         propertyType: "",
-        mapLocation: "",
         description: "",
         city: "",
-        pincode:"",
-        locality: "",
+        pincode: "",
         address: "",
         area: "",
         unitMeasurement: "",
@@ -36,10 +31,9 @@ export default function MyProperties() {
             let errors = {};
             if (!values.type) errors.type = "Type is required";
             if (!values.propertyType) errors.propertyType = "Property type is required";
-            if (!values.mapLocation) errors.mapLocation = "Map location is required";
             if (!values.description) errors.description = "Description is required";
             if (!values.city) errors.city = "City is required";
-            if (!values.pincode) errors.city = "Pincode is required";
+            if (!values.pincode) errors.pincode = "Pincode is required";
             if (!values.state) errors.state = "State is required";
             if (!values.ownerShip) errors.ownerShip = "Ownership is required";
             if (!values.area) errors.area = "Area is required";
@@ -77,11 +71,9 @@ export default function MyProperties() {
         formik.setValues({
             type: post.type,
             propertyType: post.propertyType,
-            mapLocation: post.mapLocation,
             description: post.description,
             city: post.city,
-            pincode:post.pincode,
-            locality: post.locality,
+            pincode: post.pincode,
             address: post.address,
             area: post.area,
             unitMeasurement: post.unitMeasurement,
@@ -170,7 +162,7 @@ export default function MyProperties() {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">Property Type</label>
+                                    <label className="form-label" style={{ color: 'black' }}>Property Type</label>
                                     <select
                                         name="propertyType"
                                         className="form-select"
@@ -188,19 +180,7 @@ export default function MyProperties() {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">Map Location</label>
-                                    <input
-                                        type="text"
-                                        name="mapLocation"
-                                        className="form-control"
-                                        value={formik.values.mapLocation}
-                                        onChange={formik.handleChange}
-                                    />
-                                    {formik.errors.mapLocation && <div className="text-danger">{formik.errors.mapLocation}</div>}
-                                </div>
-
-                                <div className="mb-3">
-                                    <label className="form-label">Description</label>
+                                    <label className="form-label" style={{ color: 'black' }}>Description</label>
                                     <textarea
                                         name="description"
                                         className="form-control"
@@ -211,7 +191,7 @@ export default function MyProperties() {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">State</label>
+                                    <label className="form-label" style={{ color: 'black' }}>State</label>
                                     <select
                                         name="state"
                                         className="form-select"
@@ -227,7 +207,7 @@ export default function MyProperties() {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">District</label>
+                                    <label className="form-label" style={{ color: 'black' }}>District</label>
                                     <select
                                         name="city"
                                         className="form-select"
@@ -241,31 +221,21 @@ export default function MyProperties() {
                                     </select>
                                     {formik.errors.city && <div className="text-danger">{formik.errors.city}</div>}
                                 </div>
+                                
                                 <div className="mb-3">
-                    <label className="form-label" style={{ color: 'black' }}>Pincode</label>
-                    <input
-                        type="number"
-                        name="pincode"
-                        className="form-control"
-                        value={formik.values.pincode}
-                        onChange={formik.handleChange}
-                    />
-                    {formik.errors.pincode ? <div className="text-danger">{formik.errors.pincode}</div> : null}
-                </div>
-
-                                <div className="mb-3">
-                                    <label className="form-label">Locality</label>
+                                    <label className="form-label" style={{ color: 'black' }}>Pincode</label>
                                     <input
-                                        type="text"
-                                        name="locality"
+                                        type="number"
+                                        name="pincode"
                                         className="form-control"
-                                        value={formik.values.locality}
+                                        value={formik.values.pincode}
                                         onChange={formik.handleChange}
                                     />
+                                    {formik.errors.pincode && <div className="text-danger">{formik.errors.pincode}</div>}
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">Address</label>
+                                    <label className="form-label" style={{ color: 'black' }}>Address</label>
                                     <input
                                         type="text"
                                         name="address"
@@ -273,12 +243,13 @@ export default function MyProperties() {
                                         value={formik.values.address}
                                         onChange={formik.handleChange}
                                     />
+                                    {formik.errors.address && <div className="text-danger">{formik.errors.address}</div>}
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">Area</label>
+                                    <label className="form-label" style={{ color: 'black' }}>Area</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         name="area"
                                         className="form-control"
                                         value={formik.values.area}
@@ -288,38 +259,36 @@ export default function MyProperties() {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">Unit Measurement</label>
-                                    <select
+                                    <label className="form-label" style={{ color: 'black' }}>Unit of Measurement</label>
+                                    <input
+                                        type="text"
                                         name="unitMeasurement"
-                                        className="form-select"
+                                        className="form-control"
                                         value={formik.values.unitMeasurement}
                                         onChange={formik.handleChange}
-                                    >
-                                        <option value="">Select Unit</option>
-                                        <option value="acres">Acres</option>
-                                        <option value="hectares">Hectares</option>
-                                        <option value="sqft">Square Feet</option>
-                                        <option value="sqkm">Square Kilometers</option>
-                                    </select>
+                                    />
                                     {formik.errors.unitMeasurement && <div className="text-danger">{formik.errors.unitMeasurement}</div>}
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">Ownership</label>
-                                    <input
-                                        type="text"
+                                    <label className="form-label" style={{ color: 'black' }}>Ownership</label>
+                                    <select
                                         name="ownerShip"
-                                        className="form-control"
+                                        className="form-select"
                                         value={formik.values.ownerShip}
                                         onChange={formik.handleChange}
-                                    />
+                                    >
+                                        <option value="">Select Ownership</option>
+                                        <option value="Owner">Owner</option>
+                                        <option value="Renter">Renter</option>
+                                    </select>
                                     {formik.errors.ownerShip && <div className="text-danger">{formik.errors.ownerShip}</div>}
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">Price</label>
+                                    <label className="form-label" style={{ color: 'black' }}>Price</label>
                                     <input
-                                        type="text"
+                                        type="number"
                                         name="price"
                                         className="form-control"
                                         value={formik.values.price}
@@ -329,58 +298,37 @@ export default function MyProperties() {
                                 </div>
 
                                 <div className="mb-3">
-                                    <label className="form-label">File</label>
-                                    <input
-                                        type="file"
-                                        className="form-control"
-                                        onChange={handleFileChange}
-                                    />
+                                    <label className="form-label">Image</label>
+                                    <input type="file" className="form-control" onChange={handleFileChange} />
                                 </div>
 
                                 <button type="submit" className="btn btn-primary">Update</button>
-                                <button type="button" className="btn btn-secondary ms-2" onClick={() => setEditMode(null)}>Cancel</button>
+                                <button type="button" className="btn btn-secondary" onClick={() => setEditMode(null)}>Cancel</button>
                             </form>
                         ) : (
-                            <div className="card shadow-sm property-card d-flex flex-row">
-    <div className="property-img-wrapper">
-        {post.file && (
-            <img
-                src={`http://localhost:2002${post.file}`}
-                className="img-fluid"
-                alt={post.title}
-            />
-        )}
-    </div>
-    <div className="property-details-wrapper flex-grow-1 p-3 d-flex flex-column">
-    <h5 className="card-title">{post.propertyType}</h5>
-    <p className="card-text mb-1"><strong>Location:</strong> {post.city}, {post.locality}</p>
-    <p className="card-text mb-1"><strong>Area:</strong> {post.area} {post.unitMeasurement}</p>
-    <p className="card-text mb-1"><strong>Price:</strong> ₹{post.price}</p>
-    
-    <p className="d-flex align-items-center">
-        <i className="fa fa-eye me-2"></i> 
-        <b>{post.views}</b>
-    </p>
-    
-    <div className="mt-auto d-flex">
-    <button
-      className="btn btn-primary btn-sm"
-      onClick={() => navigate(`/property/${post._id}`)}
-    >
-    View Details
-    </button>           
-    <button className="btn btn-danger ms-2" onClick={() => handleDelete(post._id)}>Delete</button>
-    <button className="btn btn-warning ms-2" onClick={() => handleEdit(post)}>Edit</button>
-    </div>
-</div>
-
-</div>
-
+                            <div>
+                                 <div className="property-img-wrapper">
+                                 {post.file && (
+                                    <img
+                                          src={`http://localhost:2002${post.file}`}
+                                          className="img-fluid"
+                                          alt={post.title}
+                                             />
+                                        )}
+                                    </div>
+                                <h5>{post.propertyType}</h5>
+                                <p>{post.description}</p>
+                                <p><strong>Location:</strong> {post.city}, {post.state}</p>
+                                <p><strong>Pincode:</strong> {post.pincode}</p>
+                                <p><strong>Price:</strong> {post.price}</p>
+                                <button className="btn btn-info" onClick={() => handleEdit(post)}>Edit</button>
+                                <button className="btn btn-danger" onClick={() => handleDelete(post._id)}>Delete</button>
+                            </div>
                         )}
                     </div>
                 ))
             ) : (
-                <div className="alert alert-info">No properties found.</div>
+                <p>No properties found.</p>
             )}
         </div>
     );

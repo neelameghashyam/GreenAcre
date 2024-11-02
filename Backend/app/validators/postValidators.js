@@ -64,18 +64,7 @@ export const postValidationSchema = {
         errorMessage: "Pincode must be 6 digits"
       }
     },
-    locality: {
-      exists: {
-        errorMessage: "Locality field is required"
-      },
-      notEmpty: {
-        errorMessage: "Locality cannot be empty"
-      },
-      isLength: {
-        options: { min: 2, max: 100 },
-        errorMessage: "Locality must be between 2 and 100 characters"
-      }
-    },
+    
     address: {
       exists: {
         errorMessage: "Address field is required"

@@ -18,7 +18,7 @@ userCntrl.register = async (req, res) => {
 
         const userCount = await User.countDocuments();
         const user = new User(req.body);
-        const salt = await bcryptjs.genSalt(10); // Salt rounds set to 10
+        const salt = await bcryptjs.genSalt(10);
         user.password = await bcryptjs.hash(user.password, salt);
 
         // Automatically assign admin role if this is the first user

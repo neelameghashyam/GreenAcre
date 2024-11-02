@@ -42,7 +42,7 @@ paymentCntrl.create = async (req, res) => {
           product_data: {
             name: "Auctions Subscription LifeTime",
           },
-          unit_amount: body.amount * 100, // Convert amount to smallest currency unit (paise for INR)
+          unit_amount: (body.amount * 100)
         },
         quantity: 1,
       }],
@@ -54,7 +54,7 @@ paymentCntrl.create = async (req, res) => {
 
     // Save payment details to your database (if required)
     const payment = new Payment(body);
-    payment.user = body.user; // Make sure this field is set correctly
+    payment.user = body.user; 
     payment.transactionId = session.id;
     payment.amount = Number(body.amount);
     payment.paymentType = 'card';
@@ -69,9 +69,8 @@ paymentCntrl.create = async (req, res) => {
 };
 
 // Edit Payment
-// Edit Payment
 paymentCntrl.edit = async (req, res) => {
-  const { id } = req.params;  // id is expected to be the transactionId
+  const { id } = req.params;  //  transactionId
 
   try {
     // Find payment by the transaction ID
