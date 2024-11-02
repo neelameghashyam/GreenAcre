@@ -3,9 +3,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "../../config/axios";
 import { toast } from 'react-toastify';
 import AuthContext from "../../context/AuthContext";
-import '../../css/AuctionDet.css'
+import '../../css/AuctionDet.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import subscriptionVideo from '../../bgImgs/subscription.mp4'; // Correctly importing the video file
 
 export default function AuctionDetails() {
   const { id } = useParams();
@@ -16,10 +16,10 @@ export default function AuctionDetails() {
   const [bidAmount, setBidAmount] = useState('');
   const [previousBids, setPreviousBids] = useState([]);
   const [highestBid, setHighestBid] = useState(0);
-  const[payment,setPayment]=useState({})
+  const [payment, setPayment] = useState({});
   const [showModal, setShowModal] = useState(false);
 
-  const { state } = useContext(AuthContext); 
+  const { state } = useContext(AuthContext);
 
   // Fetch auction details on component mount
   useEffect(() => {
@@ -35,27 +35,28 @@ export default function AuctionDetails() {
     fetchAuction();
   }, [id]);
 
-  useEffect(()=>{
-    const fetchpayment = async () => {
+  // Fetch payment details
+  useEffect(() => {
+    const fetchPayment = async () => {
       try {
-        const response = await axios.get(`/api/payment/get/${state.user}}`, {
+        const response = await axios.get(`/api/payment/get/${state.user._id}`, {
           headers: { 'Authorization': localStorage.getItem('token') },
         });
         setPayment(response.data);
-        console.log(response.data)
       } catch (err) {
         console.error('Error fetching payment:', err);
-        
       }
     };
-    fetchpayment();
-  },[state.user])
+    if (state.user) {
+      fetchPayment();
+    }
+  }, [state.user]);
 
   // Fetch all bids and filter out user's previous bids and the highest bid
   useEffect(() => {
     const fetchBids = async () => {
       try {
-        if (state.user) { 
+        if (state.user) {
           const response = await axios.get(`/api/bidder/get-all-of-auction/${id}`, {
             headers: { 'Authorization': localStorage.getItem('token') },
           });
@@ -77,35 +78,38 @@ export default function AuctionDetails() {
     fetchBids();
   }, [bidForm, id, state.user]);
 
+  // Handle viewing owner details
   const handleView = async () => {
     try {
-      if (state.user && payment.paymentStatus==='success') {
+      if (state.user && payment.paymentStatus === 'success') {
         const response = await axios.get(`/api/user/${auction.user}`, {
           headers: { 'Authorization': localStorage.getItem('token') }
         });
         setOwnerDetails(response.data);
-      } else if(!state.user){
+      } else if (!state.user) {
         navigate('/login');
-      }else {
-        setShowModal(true)
+      } else {
+        setShowModal(true);
       }
     } catch (err) {
       console.error('Error fetching owner details:', err);
     }
   };
 
+  // Handle placing a bid
   const handleBid = async () => {
     try {
-      if(payment.paymentStatus==='success'){
-         setBidForm(true)
-      }else{
-        setShowModal(true)
-    }
+      if (payment.paymentStatus === 'success') {
+        setBidForm(true);
+      } else {
+        setShowModal(true);
+      }
     } catch (err) {
       console.error(err);
     }
   };
 
+  // Handle submitting a bid
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -116,7 +120,7 @@ export default function AuctionDetails() {
       await axios.post('/api/bidder/create', formData, {
         headers: { 'Authorization': localStorage.getItem('token') },
       });
-      toast('Successfully Bidded', { autoClose: 1000 });
+      toast.success('Successfully placed bid', { autoClose: 1000 });
       setBidAmount('');
       setBidForm(false);
     } catch (err) {
@@ -124,6 +128,7 @@ export default function AuctionDetails() {
     }
   };
 
+  // Format date for display
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
@@ -131,15 +136,16 @@ export default function AuctionDetails() {
 
   if (!auction) return <p>Loading...</p>;
 
-  const handleSubscribe=async()=>{
+  // Handle subscription payment
+  const handleSubscribe = async () => {
     try {
       const body = {
         amount: "299",
-        user: state.user._id, 
+        user: state.user._id,
       };
 
-      const response = await axios.post('/api/payment/create', body, { 
-        headers: { 'Authorization': localStorage.getItem('token') } 
+      const response = await axios.post('/api/payment/create', body, {
+        headers: { 'Authorization': localStorage.getItem('token') }
       });
 
       localStorage.setItem('stripeId', response.data.id);
@@ -148,7 +154,7 @@ export default function AuctionDetails() {
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   return (
     <div className="container my-5">
@@ -170,7 +176,7 @@ export default function AuctionDetails() {
               <p className="card-text"><strong>Starting Bid:</strong> ₹{auction.startBid}</p>
               <p className="card-text"><strong>Current Highest Bid:</strong> ₹{highestBid || 'No bids yet'}</p>
 
-              {ownerDetails  ? (
+              {ownerDetails ? (
                 <div className="alert alert-info">
                   <h6>Owner Details:</h6>
                   <p><strong>Name:</strong> {ownerDetails.name}</p>
@@ -207,69 +213,48 @@ export default function AuctionDetails() {
         </div>
 
         <div className="col-lg-4">
-  {state.isLoggedIn && previousBids.length > 0 && (
-    <div className="card mb-4">
-      <div className="card-header">
-        <h4>Your Previous Bids</h4>
-      </div>
-      <div className="alert" role="alert">
-        {previousBids.map(bid => (
-          <div key={bid._id} className="alert alert-light border bid-card">
-          <p><strong>Bid Amount:</strong> ₹{bid.bid}</p>
-          <p><strong>Bid Date:</strong> {formatDate(bid.createdAt)}</p>
+          {state.isLoggedIn && previousBids.length > 0 && (
+            <div className="card mb-4">
+              <div className="card-header">
+                <h4>Your Previous Bids</h4>
+              </div>
+              <div className="alert" role="alert">
+                {previousBids.map(bid => (
+                  <div key={bid._id} className="alert alert-light border bid-card">
+                    <p><strong>Bid Amount:</strong> ₹{bid.bid}</p>
+                    <p><strong>Bid Date:</strong> {formatDate(bid.createdAt)}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {state.isLoggedIn && previousBids.length === 0 && (state.user.role === "user") && (
+            <div className="alert alert-warning" role="alert">
+              <p>No previous bids for this auction.</p>
+            </div>
+          )}
         </div>
-        
-        
-        ))}
-      </div>
-    </div>
-  )}
-
-  {state.isLoggedIn && previousBids.length === 0 && (state.user.role === "user") && (
-    <div className="alert alert-warning" role="alert">
-      <p>No previous bids for this auction.</p>
-    </div>
-  )}
-</div>
-
       </div>
 
-      {/* Subscription */}
+      {/* Subscription Modal */}
       {showModal && (
-           <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
-    <div className="modal-dialog" role="document" style={{ backgroundColor: '#2c6a30' }}>
-      <div className="modal-content" style={{ backgroundColor: '#2c6a30' }}>
-        <div className="modal-body text-center">
-          {/* Replace text with video */}
-          <video width="100%" height="auto" autoPlay  muted>
-            <source src={require('C:/Portifolio-Project/FrontEnd/my-app/src/bgImgs/subscription.png')} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
-
-          {/* Buttons centered in the modal */}
-          <div className="d-flex justify-content-center mt-4">
-            <button 
-              type="button" 
-              className="btn mx-2" 
-              onClick={() => setShowModal(false)} 
-              style={{ backgroundColor: '#f04641', color: 'white' }}
-            >
-              Close
-            </button>
-            <button 
-              type="button" 
-              className="btn mx-2" 
-              onClick={handleSubscribe} 
-              style={{ backgroundColor: '#1db4e4', color: 'white' }}
-            >
-              Pay Now
-            </button>
+        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+          <div className="modal-dialog" role="document" style={{ backgroundColor: '#2c6a30' }}>
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Subscription Required</h5>
+                <button type="button" className="btn-close" onClick={() => setShowModal(false)}></button>
+              </div>
+              <div className="modal-body text-center">
+                <p>Subscribe to access this content.</p>
+                <video src={subscriptionVideo} controls className="img-fluid mb-2" />
+                <button className="btn btn-primary" onClick={handleSubscribe}>Subscribe Now</button>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-)}
+      )}
     </div>
   );
 }

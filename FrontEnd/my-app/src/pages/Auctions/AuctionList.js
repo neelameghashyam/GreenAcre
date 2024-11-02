@@ -1,8 +1,9 @@
-import { useEffect, useState,useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../../config/axios';
 import AuthContext from "../../context/AuthContext";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import subscriptionVideo from '../../videos/subscription.mp4'; // Assuming this is the correct video path
 
 export default function AuctionList() {
   const [auctions, setAuctions] = useState([]);
@@ -12,7 +13,7 @@ export default function AuctionList() {
   const [showModal, setShowModal] = useState(false);
   const { state } = useContext(AuthContext); 
 
-
+  // Fetch auctions
   useEffect(() => {
     const fetchAuctions = async () => {
       try {
@@ -25,41 +26,45 @@ export default function AuctionList() {
     fetchAuctions();
   }, []);
 
-
-  useEffect(()=>{
-    const fetchpayment = async () => {
+  // Fetch payment status and handle modal
+  useEffect(() => {
+    const fetchPayment = async () => {
       try {
-        const response = await axios.get(`/api/payment/get/${state.user}}`, {
+        const response = await axios.get(`/api/payment/get/${state.user._id}`, { // Fixed extra curly bracket
           headers: { 'Authorization': localStorage.getItem('token') },
         });
 
-        if(response.data.paymentStatus==='success'){
-          setShowModal(false)
-        }else {
-          setShowModal(true)
+        if (response.data.paymentStatus === 'success') {
+          setShowModal(false);
+        } else {
+          setShowModal(true);
         }
       } catch (err) {
         console.error('Error fetching payment:', err);
-        if(state.user){
-          setShowModal(true)
+        if (state.user) {
+          setShowModal(true);
         }
-
       }
     };
-    fetchpayment();
-  },[state.user])
+    if (state.user) {
+      fetchPayment();
+    }
+  }, [state.user]);
 
+  // Format date
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
 
+  // Check if auction is active
   const isAuctionActive = (endDate) => {
     const currentDate = new Date();
     const auctionEndDate = new Date(endDate);
     return auctionEndDate > currentDate; 
   };
 
+  // Calculate time left for auction
   const calculateTimeLeft = (endDate) => {
     const difference = new Date(endDate) - new Date();
     if (difference > 0) {
@@ -79,6 +84,7 @@ export default function AuctionList() {
     }
   };
 
+  // Update timers for auctions
   useEffect(() => {
     const updateTimers = () => {
       const newTimeLeft = {};
@@ -97,16 +103,18 @@ export default function AuctionList() {
     return () => clearInterval(intervalId);
   }, [auctions]);
 
-
+  // Filter and paginate auctions
   const filteredAuctions = auctions.filter(auction => auction.approved && isAuctionActive(auction.endDate));
   const indexOfLastAuction = currentPage * postsPerPage;
   const indexOfFirstAuction = indexOfLastAuction - postsPerPage;
   const currentAuctions = filteredAuctions.slice(indexOfFirstAuction, indexOfLastAuction);
   const totalPages = Math.ceil(filteredAuctions.length / postsPerPage);
 
+  // Pagination handler
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const handleSubscribe=async()=>{
+  // Handle subscription
+  const handleSubscribe = async () => {
     try {
       const body = {
         amount: "299",
@@ -119,11 +127,10 @@ export default function AuctionList() {
 
       localStorage.setItem('stripeId', response.data.id);
       window.location = response.data.url;
-    
     } catch (err) {
       console.error(err);
     }
-  }
+  };
 
   return (
     <div className="container my-5">
@@ -163,46 +170,42 @@ export default function AuctionList() {
         ))}
       </div>
 
-      
-
-      {/* Subscription */}
+      {/* Subscription Modal */}
       {showModal && (
-           <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
-    <div className="modal-dialog" role="document" style={{ backgroundColor: '#2c6a30' }}>
-      <div className="modal-content" style={{ backgroundColor: '#2c6a30' }}>
-        <div className="modal-body text-center">
-          {/* Replace text with video */}
-          <video width="100%" height="auto" autoPlay  muted>
-            <source src={require('C:/Portifolio-Project/FrontEnd/my-app/src/bgImgs/subscription.png')} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+        <div className="modal fade show" style={{ display: 'block' }} tabIndex="-1" role="dialog">
+          <div className="modal-dialog" role="document" style={{ backgroundColor: '#2c6a30' }}>
+            <div className="modal-content" style={{ backgroundColor: '#2c6a30' }}>
+              <div className="modal-body text-center">
+                {/* Video in modal */}
+                <video width="100%" height="auto" autoPlay muted loop>
+                  <source src={subscriptionVideo} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
 
-          {/* Buttons centered in the modal */}
-          <div className="d-flex justify-content-center mt-4">
-            <button 
-              type="button" 
-              className="btn mx-2" 
-              onClick={() => setShowModal(false)} 
-              style={{ backgroundColor: '#f04641', color: 'white' }}
-            >
-              Close
-            </button>
-            <button 
-              type="button" 
-              className="btn mx-2" 
-              onClick={handleSubscribe} 
-              style={{ backgroundColor: '#1db4e4', color: 'white' }}
-            >
-              Pay Now
-            </button>
+                {/* Buttons centered in the modal */}
+                <div className="d-flex justify-content-center mt-4">
+                  <button 
+                    type="button" 
+                    className="btn mx-2" 
+                    onClick={() => setShowModal(false)} 
+                    style={{ backgroundColor: '#f04641', color: 'white' }}
+                  >
+                    Close
+                  </button>
+                  <button 
+                    type="button" 
+                    className="btn mx-2" 
+                    onClick={handleSubscribe} 
+                    style={{ backgroundColor: '#1db4e4', color: 'white' }}
+                  >
+                    Pay Now
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-)}
-
-
+      )}
 
       {/* Pagination */}
       {totalPages > 1 && (
