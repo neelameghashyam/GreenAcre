@@ -1,4 +1,4 @@
 import axios from "axios"
 export default axios.create({
-    baseURL:'http://localhost:2002'
+    baseURL:'https://greenacre-backend.onrender.com'
 })
