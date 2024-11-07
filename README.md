@@ -23,6 +23,10 @@ Welcome to **Green Acre** – a comprehensive platform for buying, selling, leas
 
 - 💼 **Admin & Moderator Dashboards**: Equipped with moderation tools for managing users, properties, and auctions.
 
+## 🎥 Green Acre Introduction Video
+
+[Watch the Green Acre Demo](https://github.com/neelameghashyam/GreenAcre/releases/download/v1.0.0/Green-Acre.mp4)
+
 ## 🛠️ Built Using
 
 - **Frontend**: 
@@ -45,7 +49,6 @@ Welcome to **Green Acre** – a comprehensive platform for buying, selling, leas
 - 📐 **Area Converter Tool**: Easily calculate and convert area measurements for properties.
   
 - 🧾 **Rent Receipt Generator**: Automated rent receipts for property leasing.
-
 
 ## 👨‍💻 Author
 
