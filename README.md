@@ -25,7 +25,9 @@ Welcome to **Green Acre** – a comprehensive platform for buying, selling, leas
 
 ## 🎥 Green Acre Introduction Video
 
-[Watch the Green Acre Demo]([https://github.com/neelameghashyam/GreenAcre/releases/v1.0.0/Green-Acre.mp4](https://github.com/neelameghashyam/GreenAcre/releases))
+## 🎥 Green Acre Introduction Video
+
+[![Green Acre Introduction Video](https://img.youtube.com/vi/video_id/maxresdefault.jpg)](https://github.com/neelameghashyam/GreenAcre/releases/download/v1.0.0/Green-Acre.mp4)
 
 ## 🛠️ Built Using
 
