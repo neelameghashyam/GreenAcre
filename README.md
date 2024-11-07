@@ -23,11 +23,10 @@ Welcome to **Green Acre** – a comprehensive platform for buying, selling, leas
 
 - 💼 **Admin & Moderator Dashboards**: Equipped with moderation tools for managing users, properties, and auctions.
 
-## 🎥 Green Acre Introduction Video
 
 ## 🎥 Green Acre Introduction Video
 
-[![Green Acre Introduction Video](https://img.youtube.com/vi/video_id/maxresdefault.jpg)](https://github.com/neelameghashyam/GreenAcre/releases/download/v1.0.0/Green-Acre.mp4)
+[![Green Acre Introduction Video](https://img.youtube.com/vi/Green-Acre.mp4/maxresdefault.jpg)](https://github.com/neelameghashyam/GreenAcre/releases/download/v1.0.0/Green-Acre.mp4)
 
 ## 🛠️ Built Using
 
