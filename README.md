@@ -23,9 +23,9 @@ Welcome to **Green Acre** – a comprehensive platform for buying, selling, and 
   - Role-specific permissions for creating, editing, and managing properties and auctions based on user roles.
 
 - 🔍 **Advanced Property Search**: 
-  - Refined search capabilities with filters like property type and location, delivering accurate results.
+  - Refined search capabilities with filters like property **type**, **state**, and **district**, delivering accurate results.
 
-- 📊 **State Management with Redux**: 
+- 📊 **State Management with Redux Tool Kit**: 
   - Smooth and interactive user experience with efficient state management for property listings, filters, and auctions.
 
 - 📸 **File Uploads**: 
