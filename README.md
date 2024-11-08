@@ -40,38 +40,38 @@ Welcome to **Green Acre** – a comprehensive platform for buying, selling, and 
 
 ## 🛠️ Built Using
 
-🚀 Frontend Stack:
-⚛️ React.js: Dynamic and responsive UI for seamless user interactions.
-📡 Axios: Efficient API handling for data fetching and manipulation.
-🎨 Bootstrap: Mobile-friendly design with a responsive layout.
-📊 Chart.js: Interactive data visualization and analytics.
-📝 Formik: Simplified form management and validation.
-🗺️ Leaflet: Beautiful interactive maps for geolocation and property visuals.
-🔔 React-Toastify: Elegant, customizable notifications.
+### 🚀 Frontend Stack:
+- ⚛️ **React.js**: Dynamic and responsive UI for seamless user interactions.
+- 📡 **Axios**: Efficient API handling for data fetching and manipulation.
+- 🎨 **Bootstrap**: Mobile-friendly design with a responsive layout.
+- 📊 **Chart.js**: Interactive data visualization and analytics.
+- 📝 **Formik**: Simplified form management and validation.
+- 🗺️ **Leaflet**: Beautiful interactive maps for geolocation and property visuals.
+- 🔔 **React-Toastify**: Elegant, customizable notifications.
 
-🛠️ Backend Stack:
-⚙️ Node.js & Express.js: Robust server-side logic and API handling.
-💾 MongoDB & Mongoose: Scalable NoSQL database with schema-based models.
-🔐 Bcrypt.js: Secure password hashing to protect user credentials.
-🌐 CORS: Secure cross-origin request management.
-🔑 JWT (JSON Web Tokens): Secure authentication and session management.
-📤 Multer: Efficient file handling for image and document uploads.
-📧 Nodemailer: Reliable email notifications and alerts.
-🔒 Dotenv: Environment variable management for sensitive configurations.
+### 🛠️ Backend Stack:
+- ⚙️ **Node.js & Express.js**: Robust server-side logic and API handling.
+- 💾 **MongoDB & Mongoose**: Scalable NoSQL database with schema-based models.
+- 🔐 **Bcrypt.js**: Secure password hashing to protect user credentials.
+- 🌐 **CORS**: Secure cross-origin request management.
+- 🔑 **JWT (JSON Web Tokens)**: Secure authentication and session management.
+- 📤 **Multer**: Efficient file handling for image and document uploads.
+- 📧 **Nodemailer**: Reliable email notifications and alerts.
+- 🔒 **Dotenv**: Environment variable management for sensitive configurations.
 
-💳 Payment Gateway:
-Stripe: Secure, seamless payment processing for property transactions and auctions, ensuring safe and reliable handling of all financial transactions.
 
-🛡️ Middleware:
-🔑 JWT (JSON Web Tokens): Used for secure authentication and role-based access control, protecting sensitive user data.
-📂 Multer: Handles file uploads, allowing users to upload images and documents related to properties and auctions with ease.
+### 💳 Payment Gateway:
+- **Stripe**: Secure, seamless payment processing for property transactions and auctions, ensuring safe and reliable handling of all financial transactions.
 
-🖥️ Additional Tools & Features
-📐 Area Converter Tool: Easily calculate and convert area measurements for properties, helping users quickly understand property sizes.
+### 🛡️ Middleware:
+- 🔑 **JWT (JSON Web Tokens)**: Used for secure authentication and role-based access control, protecting sensitive user data.
+- 📂 **Multer**: Handles file uploads, allowing users to upload images and documents related to properties and auctions with ease.
 
-🧾 Rent Receipt Generator: Generate automated rent receipts for property leasing, streamlining lease management.
+### 🖥️ Additional Tools & Features:
+- 📐 **Area Converter Tool**: Easily calculate and convert area measurements for properties, helping users quickly understand property sizes.
+- 🧾 **Rent Receipt Generator**: Generate automated rent receipts for property leasing, streamlining lease management.
+- 📝 **Articles & Blogs**: Stay informed with insightful articles on agricultural trends, property management tips, and market updates, providing users with valuable knowledge and resources.
 
-📝 Articles & Blogs: Stay informed with insightful articles on agricultural trends, property management tips, and market updates, providing users with valuable knowledge and resources.
 
 
 ## 🚀 Key Contributions & Achievements
