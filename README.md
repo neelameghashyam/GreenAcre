@@ -34,9 +34,13 @@ Welcome to **Green Acre** – a comprehensive platform for buying, selling, and 
 - 💼 **Admin & Moderator Dashboards**: 
   - Comprehensive dashboards with moderation tools for managing users, properties, and auctions.
 
-## 🎥 Green Acre Introduction Video
+<iframe width="560" height="315"
+    src="https://www.youtube.com/embed/video_id?autoplay=1&mute=1"
+    title="Green Acre Introduction Video" frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+</iframe>
 
-[![Green Acre Introduction Video](https://img.youtube.com/vi/video_id/maxresdefault.jpg)](https://github.com/user-attachments/assets/513983f4-f7e7-4406-9a5e-3781a7bc1765)
 
 ## 🛠️ Built Using
 
