@@ -28,7 +28,10 @@ const app = express();
 const port = 2002;
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: ['https://greenacre-frontend.onrender.com', 'http://localhost:3000'],
+  credentials: true
+}));
 dotenv.config();
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
