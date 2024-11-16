@@ -36,7 +36,7 @@ Welcome to **Green Acre** – a comprehensive platform for buying, selling, and 
 
 ## 🎥 Green Acre Introduction Video
 
-[![Green Acre Introduction Video](https://img.youtube.com/vi/video_id/maxresdefault.jpg)](https://www.youtube.com/watch?v=video_id&autoplay=1)
+[![Green Acre Introduction Video](https://img.youtube.com/vi/video_id/maxresdefault.jpg)](https://github.com/user-attachments/assets/513983f4-f7e7-4406-9a5e-3781a7bc1765)
 
 
 
